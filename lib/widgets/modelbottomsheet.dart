@@ -73,6 +73,8 @@ class _ContactOptionModalState extends State<ContactOptionModal> {
               vertical: 12,
             ),
             child: TextField(
+              focusNode: FocusNode(),
+              keyboardType: TextInputType.number,
               controller: txtNumber,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
