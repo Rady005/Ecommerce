@@ -1,3 +1,4 @@
+import 'package:assigmentflutterone/screens/categoryscreen.dart';
 import 'package:assigmentflutterone/screens/detailprodcts.dart';
 import 'package:assigmentflutterone/screens/mainscreen.dart';
 import 'package:assigmentflutterone/screens/orderscreen.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 
 
 import 'routes/routes.dart';
-import 'screens/category.dart';
 import 'screens/chartsrceen.dart';
 import 'screens/homescreen.dart';
 import 'screens/map_screen.dart';
@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
       routes: {
         Routes.home: (context) => const Homescreen(),
         Routes.addtochart: (context) => const MyCart(),
-        Routes.blush: (context) => const Category(),
+        Routes.blush: (context) => const Categoryscreen(),
         Routes.productDetails: (context) => const ProductDetails(),
         Routes.order: (context) => const OrderScreen(),
         Routes.payment: (context) => const PaymentScreen(),

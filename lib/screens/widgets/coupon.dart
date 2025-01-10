@@ -1,8 +1,7 @@
-
 import 'package:flutter/material.dart';
 
-class ContactNumberModalDailog {
-  ContactNumberModalDailog._();
+class CouponModalDailog {
+  CouponModalDailog._();
 
   static Future show(
     BuildContext context,
@@ -16,23 +15,23 @@ class ContactNumberModalDailog {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: const ContactOptionModal(),
+          child: const CouponDialog(),
         );
       },
     );
   }
 }
 
-class ContactOptionModal extends StatefulWidget {
-  const ContactOptionModal({
+class CouponDialog extends StatefulWidget {
+  const CouponDialog({
     super.key,
   });
 
   @override
-  State<ContactOptionModal> createState() => _ContactOptionModalState();
+  State<CouponDialog> createState() => _CouponDialogState();
 }
 
-class _ContactOptionModalState extends State<ContactOptionModal> {
+class _CouponDialogState extends State<CouponDialog> {
   var txtNumber = TextEditingController();
 
   @override
@@ -64,7 +63,7 @@ class _ContactOptionModalState extends State<ContactOptionModal> {
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: const Text('Contact Number'),
+              child: const Text('Coupon Code'),
             ),
           ),
           Padding(
@@ -73,8 +72,7 @@ class _ContactOptionModalState extends State<ContactOptionModal> {
               vertical: 12,
             ),
             child: TextField(
-              focusNode: FocusNode(),
-              keyboardType: TextInputType.number,
+              autofocus: true,
               controller: txtNumber,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),

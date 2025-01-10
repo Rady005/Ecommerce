@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import '../models/allitemdisplay.dart';
 import '../routes/routes.dart';
 
-class Category extends StatelessWidget {
-  const Category({super.key});
+class Categoryscreen extends StatefulWidget {
+  const Categoryscreen({super.key});
 
+  @override
+  State<Categoryscreen> createState() => _CategoryscreenState();
+}
+
+class _CategoryscreenState extends State<Categoryscreen> {
   @override
   Widget build(BuildContext context) {
     var filteredProducts = ModalRoute.of(context)?.settings.arguments
@@ -16,6 +21,7 @@ class Category extends StatelessWidget {
         title: const Text(
           "Product",
           style: TextStyle(fontSize: 25, color: Colors.white),
+          
         ),
         centerTitle: true,
         backgroundColor: Colors.pink,

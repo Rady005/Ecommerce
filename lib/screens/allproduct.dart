@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bounceable/flutter_bounceable.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../models/allitemdisplay.dart';
 import '../routes/routes.dart';
@@ -30,7 +30,7 @@ class _AllProductState extends State<AllProduct> {
       itemBuilder: (BuildContext context, int index) {
         var item = widget.products[index];
         var product = Product.fromJson(item);
-        return GestureDetector(
+        return Bounceable(
           onTap: () {
             detailScreenClick(context, product);
           },
@@ -48,6 +48,15 @@ class _AllProductState extends State<AllProduct> {
                       "http:${product.image}",
                       fit: BoxFit.cover,
                       width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -94,8 +103,8 @@ class _AllProductState extends State<AllProduct> {
       },
     );
   }
+}
 
-  void detailScreenClick(BuildContext context, Product product) async {
-    Navigator.pushNamed(context, Routes.productDetails, arguments: product);
-  }
+void detailScreenClick(BuildContext context, Product product) async {
+  Navigator.pushNamed(context, Routes.productDetails, arguments: product);
 }

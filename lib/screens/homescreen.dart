@@ -1,17 +1,14 @@
-
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-
 import '../models/listproduct.dart';
-import '../resource/product_sliver.dart';
-import '../resource/slide.dart';
+import '../models/resource/product_sliver.dart';
+import '../models/resource/slide.dart';
 import '../routes/routes.dart';
 import 'allproduct.dart';
-import 'category.dart';
 import 'detailprodcts.dart';
+import 'widgets/category.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -48,6 +45,7 @@ class _SildebarState extends State<Homescreen> {
             onTap: () async {
               Cart? cart = await loadCartItems();
               Navigator.pushNamed(
+                // ignore: use_build_context_synchronously
                 context,
                 Routes.addtochart,
                 arguments: cart,
@@ -76,11 +74,11 @@ class _SildebarState extends State<Homescreen> {
             children: [
               buildCarouselSilder(),
               const SizedBox(height: 5),
-              Container(
-                height: 10,
-                color: Colors.white,
-              ),
+              const Divider(),
+
               const Category(),
+              const Divider(),
+
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Text(
@@ -113,6 +111,13 @@ class _SildebarState extends State<Homescreen> {
                 slidesCarousel[itemIndex],
                 width: MediaQuery.of(context).size.width, // Match screen width
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    "assets/empty.jpg",
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  );
+                },
               ),
             ),
           ),

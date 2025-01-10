@@ -1291,7 +1291,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1019,
     "brand": "maia's mineral galaxy",
     "name": "Mineral Eye Brow Liner Charcoal Brown",
-    "price": "0.0",
+    "price": "1.5",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3196,7 +3196,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1038,
     "brand": "sally b's skin yummies",
     "name": "B Smudged",
-    "price": "0.0",
+    "price": "8.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3224,7 +3224,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1036,
     "brand": "rejuva minerals",
     "name": "Multi Purpose Powder - Blush \u0026 Eye",
-    "price": "0.0",
+    "price": "8.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3254,7 +3254,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1034,
     "brand": "rejuva minerals",
     "name": "Multi Purpose Powder - Eye Shadow \u0026 Face",
-    "price": "0.0",
+    "price": "9.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3288,7 +3288,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1027,
     "brand": "marienatie",
     "name": "Pressed Eye Shadow",
-    "price": "0.0",
+    "price": "10.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3328,7 +3328,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1024,
     "brand": "marienatie",
     "name": "Loose Mineral Eyeshadow",
-    "price": "0.0",
+    "price": "12.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3368,7 +3368,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1016,
     "brand": "lotus cosmetics usa",
     "name": "Eye Shadow Palette Mesmerize",
-    "price": "0.0",
+    "price": "12.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3398,7 +3398,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1015,
     "brand": "lotus cosmetics usa",
     "name": "Eye Shadow Palette Deluxe",
-    "price": "0.0",
+    "price": "12.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3428,7 +3428,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1014,
     "brand": "lotus cosmetics usa",
     "name": "Eye Shadow Palette Smokey",
-    "price": "0.0",
+    "price": "12.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3458,7 +3458,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1013,
     "brand": "lotus cosmetics usa",
     "name": "Eye Shadow Palette Seduction",
-    "price": "0.0",
+    "price": "12.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3488,7 +3488,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1012,
     "brand": "lotus cosmetics usa",
     "name": "Eye Shadow Palette Cocoa",
-    "price": "0.0",
+    "price": "12.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -3991,7 +3991,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1033,
     "brand": "rejuva minerals",
     "name": "Pressed Powder Foundation",
-    "price": "0.0",
+    "price": "8.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -4028,7 +4028,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1028,
     "brand": "marienatie",
     "name": "Pressed Foundation",
-    "price": "0.0",
+    "price": "8.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -5270,7 +5270,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1037,
     "brand": "sally b's skin yummies",
     "name": "B Glossy Lip Gloss",
-    "price": "0.0",
+    "price": "10.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -5303,7 +5303,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1030,
     "brand": "penny lane organics",
     "name": "Lip Gloss",
-    "price": "0.0",
+    "price": "4.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -5343,7 +5343,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1029,
     "brand": "nudus",
     "name": "Amalia",
-    "price": "0.0",
+    "price": "5.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -5384,7 +5384,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1023,
     "brand": "marienatie",
     "name": "Lipstick",
-    "price": "0.0",
+    "price": "3.5",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -5414,7 +5414,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1022,
     "brand": "marienatie",
     "name": "Lip Gloss",
-    "price": "0.0",
+    "price": "7.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link": "https://www.purpicks.com/wp-content/uploads/csm/Envy1.jpg",
@@ -5447,7 +5447,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1010,
     "brand": "coastal classic creation",
     "name": "Conch Lipstick",
-    "price": "0.0",
+    "price": "4.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -5489,7 +5489,7 @@ const List<Map<String, dynamic>> products = [
     "id": 1009,
     "brand": "c'est moi",
     "name": "Reflect Lip Gloss",
-    "price": "0.0",
+    "price": "7.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -6059,7 +6059,7 @@ const List<Map<String, dynamic>> products = [
     "id": 871,
     "brand": "nyx",
     "name": "Extra Creamy Round Lipstick",
-    "price": "0.0",
+    "price": "5.0",
     "price_sign": "\$",
     "currency": "USD",
     "image_link":
@@ -7207,8 +7207,8 @@ const List<Map<String, dynamic>> products = [
     "id": 719,
     "brand": "dior",
     "name":
-        "\n                            Grenat\n                            ",
-    "price": "0.0",
+        "Grenat",
+    "price": "10.0",
     "price_sign": "£",
     "currency": "GBP",
     "image_link":
@@ -7238,7 +7238,7 @@ const List<Map<String, dynamic>> products = [
   {
     "id": 718,
     "brand": "dior",
-    "name": "\n                            Ruby\n                            ",
+    "name": "Ruby",
     "price": "20.5",
     "price_sign": "£",
     "currency": "GBP",

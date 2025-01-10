@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ class _MapScreenState extends State<MapScreen> {
       const CameraPosition(target: LatLng(11.572543, 104.893275), zoom: 20);
   GoogleMapController? mapController;
   String address = 'Loading ...';
+  bool isLoading = true;
   Timer? _timer;
   int _start = 2;
 
@@ -62,6 +62,7 @@ class _MapScreenState extends State<MapScreen> {
 
     // Get the current location
     Position position = await Geolocator.getCurrentPosition(
+        // ignore: deprecated_member_use
         desiredAccuracy: LocationAccuracy.high);
 
     setState(() {
@@ -95,6 +96,7 @@ class _MapScreenState extends State<MapScreen> {
             onMapCreated: (controller) => mapController = controller,
             onCameraMove: (position) {
               setState(() {
+                isLoading = true;
                 address = 'Loading ...';
               });
               delayTwoSecondToGetAddress(position.target);
@@ -144,9 +146,11 @@ class _MapScreenState extends State<MapScreen> {
                         height: 40,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context, address);
-                          },
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  Navigator.pop(context, address);
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
                           ),
@@ -191,6 +195,7 @@ class _MapScreenState extends State<MapScreen> {
         // Update state with the formatted address
         setState(() {
           address = detailedAddress;
+          isLoading = false;
         });
       } else {
         setState(() {

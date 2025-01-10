@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 
 import '../models/listproduct.dart';
-import '../resource/product_sliver.dart';
+import '../models/resource/product_sliver.dart';
 import 'allproduct.dart';
 import 'chartsrceen.dart';
 import 'detailprodcts.dart';
@@ -70,6 +70,7 @@ class _SearchsrceenState extends State<Searchsrceen> {
             onTap: () async {
               Cart? cart = await loadCartItems();
               Navigator.push(
+                // ignore: use_build_context_synchronously
                 context,
                 MaterialPageRoute(
                   builder: (context) => MyCart(),

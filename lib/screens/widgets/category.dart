@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../models/allitemdisplay.dart';
-import '../resource/product_sliver.dart';
-import '../resource/product_type.dart';
-import '../routes/routes.dart';
-
-
+import '../../models/allitemdisplay.dart';
+import '../../models/resource/product_sliver.dart';
+import '../../models/resource/product_type.dart';
+import '../../routes/routes.dart';
 class Category extends StatefulWidget {
   const Category({super.key});
 
@@ -21,7 +20,7 @@ class _CategoryState extends State<Category> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -30,22 +29,26 @@ class _CategoryState extends State<Category> {
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 15),
         SizedBox(
-          height: 140,
+          height: 120,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: productType.length,
             itemBuilder: (context, index) {
-              return Card(
-                elevation: 5,
+              return Container(
+                decoration: BoxDecoration(
+                    color: selectedProductType == productType[index]
+                        ? Colors.grey[200]
+                        : Colors.white,
+                    shape: BoxShape.rectangle),
                 child: Column(
                   children: [
-                    InkWell(
+                    Bounceable(
                       onTap: () {
                         setState(() {
                           selectedProductType = productType[index];
-                        });
+                        },);
                         List<Map<String, dynamic>> fitterProduct = products
                             .where((product) =>
                                 product["product_type"].toLowerCase() ==
@@ -77,10 +80,6 @@ class _CategoryState extends State<Category> {
             },
           ),
         ),
-        Container(
-          height: 10,
-          color: Colors.grey[200],
-        )
       ],
     );
   }
