@@ -83,11 +83,12 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // TextEditingController mapsearch = TextEditingController();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[600],
-        title: const Text('Select Location'),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.blue[600],
+      //   title: const Text('Select Location'),
+      // ),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -117,23 +118,29 @@ class _MapScreenState extends State<MapScreen> {
             child: ColoredBox(
               color: Colors.white,
               child: SizedBox(
-                height: 100,
+                height: 150,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.location_on_rounded),
+                        const Icon(
+                          Icons.location_on_rounded,
+                          size: 48,
+                        ),
                         const SizedBox(width: 8),
                         Flexible(
-                          child: Text(
-                            address,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              address,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),
@@ -143,7 +150,7 @@ class _MapScreenState extends State<MapScreen> {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: SizedBox(
-                        height: 40,
+                        height: 50,
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: isLoading
@@ -166,6 +173,7 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ),
           ),
+
         ],
       ),
     );

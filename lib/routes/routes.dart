@@ -9,4 +9,5 @@ class Routes {
   static const payment = "/paymentscreen";
   static const  mains="/mainscreen";
   static const search="/search";
+  static const detaillocation = "/detaillocation";
 }

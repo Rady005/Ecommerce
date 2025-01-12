@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/allitemdisplay.dart';
+import '../models/cupon.dart';
 import '../routes/routes.dart';
 import 'map_screen.dart';
 import 'widgets/coupon.dart';
@@ -22,24 +24,11 @@ class _OrderScreenState extends State<OrderScreen> {
   List<Map<String, dynamic>> cart = [];
   List<Map<String, dynamic>> buynow = [];
 
-  final List<Map<String, dynamic>> coupons = [
-    {
-      "code": "ANT",
-      "value": 5, // Discount 5%
-    },
-    {
-      "code": "HAPPY NEW YEAR",
-      "value": 10, // Discount 10%
-    },
-    {
-      "code": "Lyhuxd",
-      "value": 20, // Discount 20%
-    },
-    {
-      "code": "Rahu",
-      "value": 10, // Discount 10%
-    }
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
 
   @override
   void didChangeDependencies() {
@@ -50,6 +39,20 @@ class _OrderScreenState extends State<OrderScreen> {
       cart = arguments;
       _calculateTotal();
     });
+  }
+
+  Future<void> _loadPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      location = prefs.getString('location') ?? "Select your Location";
+      phonenumber = prefs.getString('phonenumber') ?? "Enter your phone number";
+    });
+  }
+
+  Future<void> _savePreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('location', location);
+    await prefs.setString('phonenumber', phonenumber);
   }
 
   void _calculateTotal() {
@@ -99,6 +102,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   GestureDetector(
                     onTap: () {
                       pushMapscreen(context);
+                      
                     },
                     child: buildwithImage("assets/Delivery Scooter@3x.png",
                         "Delivery Location", location),
@@ -124,7 +128,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   buildItemfromCart(),
                   const Divider(),
                   const SizedBox(height: 10),
-                  cart.isEmpty ? const Text("No product") : buildItem(),
                   GestureDetector(
                     onTap: () {
                       genderModalDailogCoupon();
@@ -132,6 +135,8 @@ class _OrderScreenState extends State<OrderScreen> {
                     child: buildwithImage(
                         "assets/Voucher@3x.png", "Coupon", cupon),
                   ),
+                  const Divider(),
+                  cart.isEmpty ? const Text("No product") : buildItem(),
                   const Divider(),
                   _buildOrderSummary(),
                   const Divider(),
@@ -143,14 +148,16 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    "\$ ${price.toStringAsFixed(3)}",
+                    "\$ ${price.toStringAsFixed(2)}",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _savePreferences();
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -163,7 +170,8 @@ class _OrderScreenState extends State<OrderScreen> {
                   ),
                 ),
               ],
-            )
+            ),
+            SizedBox(height: 10),
           ],
         ),
       ),
@@ -171,28 +179,26 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   Widget buildItem() {
-    return Card(
-      child: Expanded(
-        child: SizedBox(
-          height: 70,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Row(children: [
-                Image.asset("assets/Purchase Order@2x.png",
-                    width: 40, height: 40),
-                const SizedBox(width: 5),
-                Text(
-                  "Order Summary",
-                  style: TextStyle(color: Colors.black),
-                ),
-                SizedBox(width: 5),
-                Text(
-                  "${cart.length} items",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ]),
-            ),
+    return Expanded(
+      child: SizedBox(
+        height: 70,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(children: [
+              Image.asset("assets/Purchase Order@2x.png",
+                  width: 40, height: 40),
+              const SizedBox(width: 5),
+              Text(
+                "Order Summary",
+                style: TextStyle(color: Colors.black),
+              ),
+              SizedBox(width: 5),
+              Text(
+                "${cart.length} items",
+                style: TextStyle(color: Colors.black),
+              ),
+            ]),
           ),
         ),
       ),
@@ -258,7 +264,7 @@ class _OrderScreenState extends State<OrderScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Subtotal", style: TextStyle(fontSize: 16)),
-            Text("\$ ${(price + discount).toStringAsFixed(3)}",
+            Text("\$ ${(price + discount).toStringAsFixed(2)}",
                 style: TextStyle(fontSize: 16)),
           ],
         ),
@@ -267,7 +273,7 @@ class _OrderScreenState extends State<OrderScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Discount", style: TextStyle(fontSize: 16)),
-            Text("\$ ${discount.toStringAsFixed(3)}",
+            Text("\$ ${discount.toStringAsFixed(2)}",
                 style: TextStyle(fontSize: 16)),
           ],
         ),
@@ -305,6 +311,7 @@ class _OrderScreenState extends State<OrderScreen> {
     if (selectedAddress is String) {
       setState(() {
         location = selectedAddress;
+        _savePreferences();
       });
     }
   }
@@ -314,6 +321,7 @@ class _OrderScreenState extends State<OrderScreen> {
     if (result is String) {
       setState(() {
         phonenumber = result;
+        _savePreferences();
       });
     }
   }
@@ -485,53 +493,54 @@ class _OrderScreenState extends State<OrderScreen> {
     final product = ModalRoute.of(context)?.settings.arguments as Product;
 
     return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Image.network(
-                "http:${product.image}",
-                height: 200,
-              ),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Image.network(
+              "http:${product.image}",
+              height: 200,
             ),
-            const SizedBox(height: 20),
-            Text(
-              product.name,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            product.name,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 10),
-            Text(
-              "Price: ${product.priceSign} ${product.price}",
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.red,
-              ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            "Price: ${product.priceSign} ${product.price}",
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.red,
             ),
-            const SizedBox(height: 10),
-            Text(
-              "Color: ${product.productColors}",
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            "Color: ${product.productColors}",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 10),
-            const Text(
-              "Description",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "Description",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            Text(
-              product.description,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ));
+          ),
+          Text(
+            product.description,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
   }
 }

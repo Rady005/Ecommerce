@@ -3,10 +3,9 @@ import 'package:assigmentflutterone/screens/detailprodcts.dart';
 import 'package:assigmentflutterone/screens/mainscreen.dart';
 import 'package:assigmentflutterone/screens/orderscreen.dart';
 import 'package:flutter/material.dart';
-
-
 import 'routes/routes.dart';
 import 'screens/chartsrceen.dart';
+import 'screens/detailocation.dart';
 import 'screens/homescreen.dart';
 import 'screens/map_screen.dart';
 import 'screens/payment.dart';
@@ -34,6 +33,7 @@ class MainApp extends StatelessWidget {
         Routes.map: (context) => const MapScreen(),
         Routes.mains: (contexst) => const Mainscreen(),
         Routes.search: (context) => const Searchsrceen(),
+        Routes.detaillocation: (context) => const Detailocation(),
       },
     );
   }
