@@ -191,6 +191,15 @@ class _SearchsrceenState extends State<Searchsrceen> {
       automaticallyImplyLeading: false,
       title: Row(
         children: [
+          Text(
+            "RS",
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontFamily: 'Proxima Nova'),
+          ),
+          SizedBox(width: 8),
           Expanded(child: buildSearchTextField()),
           SizedBox(width: 5),
           GestureDetector(

@@ -10,4 +10,5 @@ class Routes {
   static const  mains="/mainscreen";
   static const search="/search";
   static const detaillocation = "/detaillocation";
+  static const login = "/loginscreen";
 }

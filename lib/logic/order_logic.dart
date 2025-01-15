@@ -21,7 +21,7 @@ class OrderLogic {
     await prefs.setString('phonenumber', phonenumber);
   }
 
-  static void calculateTotal(
+   void calculateTotal(
       List<Map<String, dynamic>> cart,
       List<Map<String, dynamic>> coupons,
       String cupon,
@@ -46,4 +46,6 @@ class OrderLogic {
       price -= discount;
     });
   }
+
+
 }

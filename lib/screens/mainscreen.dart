@@ -1,6 +1,6 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 
 import 'homescreen.dart';
 import 'setting.dart';
@@ -25,48 +25,51 @@ class _MainscreenState extends State<Mainscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[curentindex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: curentindex,
+      bottomNavigationBar: CurvedNavigationBar(
+        index: curentindex,
         onTap: (value) {
           setState(() {
             curentindex = value;
           });
         },
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.transparent,
+        color: Colors.pinkAccent,
+        buttonBackgroundColor: Colors.pinkAccent,
+        height: 60,
         items: [
-          BottomNavigationBarItem(
-              icon: curentindex == 0
-                  ? SvgPicture.asset(
-                      "assets/svg/home_solid.svg",
-                      // colorFilter:
-                      //     const ColorFilter.mode(Colors.black, BlendMode.src),
-                    )
-                  : SvgPicture.asset(
-                      "assets/svg/home 03.svg",
-                      // colorFilter:
-                      //     const ColorFilter.mode(Colors.black, BlendMode.src),
-                    ),
-              label: 'Home'),
-          BottomNavigationBarItem(
-              icon: curentindex == 1
-                  ? SvgPicture.asset(
-                      "assets/svg/love_solid.svg",
-                    )
-                  : SvgPicture.asset(
-                      "assets/svg/love.svg",
-                    ),
-              label: 'Wishlist'),
-          BottomNavigationBarItem(
-              icon: curentindex == 2
-                  ? SvgPicture.asset(
-                      "assets/svg/setting_solid.svg",
-                    )
-                  : SvgPicture.asset(
-                      "assets/svg/setting.svg",
-                    ),
-              label: 'Setting'),
+          curentindex == 0
+              ? SvgPicture.asset(
+                  "assets/svg/home_solid.svg",
+                  width: 30,
+                  height: 30,
+                )
+              : SvgPicture.asset(
+                  "assets/svg/home 03.svg",
+                  width: 30,
+                  height: 30,
+                ),
+          curentindex == 1
+              ? SvgPicture.asset(
+                  "assets/svg/love_solid.svg",
+                  width: 30,
+                  height: 30,
+                )
+              : SvgPicture.asset(
+                  "assets/svg/love.svg",
+                  width: 30,
+                  height: 30,
+                ),
+          curentindex == 2
+              ? SvgPicture.asset(
+                  "assets/svg/setting_solid.svg",
+                  width: 30,
+                  height: 30,
+                )
+              : SvgPicture.asset(
+                  "assets/svg/setting.svg",
+                  width: 30,
+                  height: 30,
+                ),
         ],
       ),
     );

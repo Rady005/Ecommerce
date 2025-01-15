@@ -1170,9 +1170,9 @@ const List<Map<String, dynamic>> products = [
     "api_featured_image":
         "//s3.amazonaws.com/donovanbailey/products/api_featured_images/000/000/432/original/data?1514063323",
     "product_colors": [
-      {"hex_value": "#CC8666", "colour_name": null},
-      {"hex_value": "#E5C0AA", "colour_name": null},
-      {"hex_value": "#CC9873", "colour_name": null}
+      {"hex_value": "#CC8666", "colour_name": "Light Red Brown"},
+      {"hex_value": "#E5C0AA", "colour_name": "Pink"},
+      {"hex_value": "#CC9873", "colour_name": "Light Brown"}
     ]
   },
   {
@@ -7206,8 +7206,7 @@ const List<Map<String, dynamic>> products = [
   {
     "id": 719,
     "brand": "dior",
-    "name":
-        "Grenat",
+    "name": "Grenat",
     "price": "10.0",
     "price_sign": "£",
     "currency": "GBP",

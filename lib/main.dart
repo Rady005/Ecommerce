@@ -7,6 +7,7 @@ import 'routes/routes.dart';
 import 'screens/chartsrceen.dart';
 import 'screens/detailocation.dart';
 import 'screens/homescreen.dart';
+import 'screens/loginscreen.dart';
 import 'screens/map_screen.dart';
 import 'screens/payment.dart';
 import 'screens/searchsrceen.dart';
@@ -34,6 +35,7 @@ class MainApp extends StatelessWidget {
         Routes.mains: (contexst) => const Mainscreen(),
         Routes.search: (context) => const Searchsrceen(),
         Routes.detaillocation: (context) => const Detailocation(),
+        Routes.login: (context) => const Loginscreen(),
       },
     );
   }

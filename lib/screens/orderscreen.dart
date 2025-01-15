@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/allitemdisplay.dart';
@@ -23,6 +24,9 @@ class _OrderScreenState extends State<OrderScreen> {
   double discount = 0;
   List<Map<String, dynamic>> cart = [];
   List<Map<String, dynamic>> buynow = [];
+  bool isplaceorder = false;
+  String buttonState = "PLACE ORDER";
+  String displayPrice = "";
 
   @override
   void initState() {
@@ -73,6 +77,7 @@ class _OrderScreenState extends State<OrderScreen> {
     }
     setState(() {
       price -= discount;
+      displayPrice = "\$ ${price.toStringAsFixed(2)}"; // Update display price
     });
   }
 
@@ -102,7 +107,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   GestureDetector(
                     onTap: () {
                       pushMapscreen(context);
-                      
                     },
                     child: buildwithImage("assets/Delivery Scooter@3x.png",
                         "Delivery Location", location),
@@ -148,31 +152,101 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    "\$ ${price.toStringAsFixed(2)}",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    displayPrice.isEmpty
+                        ? "\$ ${price.toStringAsFixed(2)}"
+                        : displayPrice,
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _savePreferences();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        textStyle: const TextStyle(fontSize: 18),
-                        shape: RoundedRectangleBorder()),
-                    child: const Text(
-                      "PLACE ORDER",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                ),
+                buildActionButton(),
               ],
             ),
             SizedBox(height: 10),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildActionButton() {
+    switch (buttonState) {
+      case "PLACE ORDER":
+        return buildPlaceOrder();
+      case "MARK AS RECEIVED":
+        return buildMarkAsReceived();
+      case "COMPLETE":
+        return buildComplete();
+      default:
+        return buildPlaceOrder();
+    }
+  }
+
+  Widget buildComplete() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 2,
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {});
+        },
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            textStyle: const TextStyle(fontSize: 18),
+            shape: RoundedRectangleBorder()),
+        child: const Text(
+          "COMPLETE",
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+      ),
+    );
+  }
+
+  Widget buildMarkAsReceived() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 2,
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            buttonState = "COMPLETE";
+          });
+        },
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            textStyle: const TextStyle(fontSize: 18),
+            side: BorderSide(color: Colors.black, width: 2),
+            shape: RoundedRectangleBorder()),
+        child: const Text(
+          "MARK AS RECEIVED",
+          style: TextStyle(color: Colors.black, fontSize: 18),
+        ),
+      ),
+    );
+  }
+
+  Widget buildPlaceOrder() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 2,
+      child: ElevatedButton(
+        onPressed: () {
+          _savePreferences();
+          setState(() {
+            buttonState = "MARK AS RECEIVED";
+            displayPrice =
+                "Process\n ${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
+          });
+        },
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            textStyle: const TextStyle(fontSize: 18),
+            side: BorderSide(
+              color: Colors.black,
+            ),
+            shape: RoundedRectangleBorder()),
+        child: const Text(
+          "PLACE ORDER",
+          style: TextStyle(color: Colors.white, fontSize: 18),
         ),
       ),
     );
@@ -195,7 +269,7 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
               SizedBox(width: 5),
               Text(
-                "${cart.length} items",
+                "(${cart.length} items)",
                 style: TextStyle(color: Colors.black),
               ),
             ]),
@@ -287,7 +361,7 @@ class _OrderScreenState extends State<OrderScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(
-              "\$ ${price.toStringAsFixed(3)}",
+              "\$ ${price.toStringAsFixed(2)}",
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ],
@@ -489,58 +563,5 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Widget reciveDataformbuynow(BuildContext context) {
-    final product = ModalRoute.of(context)?.settings.arguments as Product;
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Image.network(
-              "http:${product.image}",
-              height: 200,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            product.name,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            "Price: ${product.priceSign} ${product.price}",
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.red,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            "Color: ${product.productColors}",
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            "Description",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            product.description,
-            style: const TextStyle(fontSize: 16),
-          ),
-        ],
-      ),
-    );
-  }
 }
