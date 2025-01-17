@@ -24,7 +24,10 @@ class _MainscreenState extends State<Mainscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _children[curentindex],
+      body: IndexedStack(
+        children: _children,
+        index: curentindex,
+      ),
       bottomNavigationBar: CurvedNavigationBar(
         index: curentindex,
         onTap: (value) {

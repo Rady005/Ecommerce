@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:assigmentflutterone/models/resource/product_sliver.dart';
@@ -80,10 +78,16 @@ class Homescrenwidget {
           border: Border.all(color: Colors.black),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 15, left: 10),
-          child: Text(
-            "Search anything you like",
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            children: [
+              Icon(Icons.search),
+              SizedBox(width: 10),
+              Text(
+                "Search anything you like",
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ],
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/allitemdisplay.dart';
@@ -27,7 +28,8 @@ class _OrderScreenState extends State<OrderScreen> {
   bool isplaceorder = false;
   String buttonState = "PLACE ORDER";
   String displayPrice = "";
-
+  String process = "Process";
+  bool isshow = false;
   @override
   void initState() {
     super.initState();
@@ -104,6 +106,7 @@ class _OrderScreenState extends State<OrderScreen> {
             Expanded(
               child: ListView(
                 children: <Widget>[
+                  buildshow(),
                   GestureDetector(
                     onTap: () {
                       pushMapscreen(context);
@@ -151,11 +154,18 @@ class _OrderScreenState extends State<OrderScreen> {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    displayPrice.isEmpty
-                        ? "\$ ${price.toStringAsFixed(2)}"
-                        : displayPrice,
-                    style: TextStyle(fontSize: 14),
+                  child: RichText(
+                    text: TextSpan(
+                        // text: "Proccess\n",
+                        style: TextStyle(color: Colors.yellow),
+                        children: [
+                          TextSpan(
+                            text: displayPrice.isEmpty
+                                ? "\$ ${price.toStringAsFixed(2)}"
+                                : displayPrice,
+                            style: TextStyle(fontSize: 14, color: Colors.black),
+                          ),
+                        ]),
                   ),
                 ),
                 buildActionButton(),
@@ -166,6 +176,14 @@ class _OrderScreenState extends State<OrderScreen> {
         ),
       ),
     );
+  }
+
+  Widget buildshow() {
+    if (isshow == false) {
+      return buildEmptycontainer();
+    }
+
+    return buildwaitingstatus();
   }
 
   Widget buildActionButton() {
@@ -186,7 +204,10 @@ class _OrderScreenState extends State<OrderScreen> {
       width: MediaQuery.of(context).size.width / 2,
       child: ElevatedButton(
         onPressed: () {
-          setState(() {});
+          isshow = false;
+          // setState(() {
+          //   Navigator.pushNamed(context, Routes.myorder);
+          // });
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
@@ -209,6 +230,13 @@ class _OrderScreenState extends State<OrderScreen> {
           setState(() {
             buttonState = "COMPLETE";
           });
+          QuickAlert.show(
+              context: context,
+              type: QuickAlertType.success,
+              text: 'Buy  Completed Successfully!',
+              onConfirmBtnTap: () {
+                Navigator.pushNamed(context, Routes.myorder);
+              });
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
@@ -229,11 +257,12 @@ class _OrderScreenState extends State<OrderScreen> {
       width: MediaQuery.of(context).size.width / 2,
       child: ElevatedButton(
         onPressed: () {
+          isshow = true;
           _savePreferences();
           setState(() {
             buttonState = "MARK AS RECEIVED";
             displayPrice =
-                "Process\n ${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
+                "Process\n${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
           });
         },
         style: ElevatedButton.styleFrom(
@@ -296,7 +325,7 @@ class _OrderScreenState extends State<OrderScreen> {
       child: Card(
         elevation: 2,
         child: SizedBox(
-          height: 70,
+          height: 80,
           child: Padding(
             padding: const EdgeInsets.only(left: 10),
             child: Row(children: [
@@ -318,7 +347,7 @@ class _OrderScreenState extends State<OrderScreen> {
                     SizedBox(height: 8),
                     Text(text2,
                         style: TextStyle(fontSize: 12),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis),
                   ],
                 ),
@@ -563,5 +592,28 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
+  Widget buildEmptycontainer() {
+    return Container(
+      height: 1,
+      color: Colors.white,
+    );
+  }
 
+  Widget buildwaitingstatus() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
+      child: Container(
+        height: 60,
+        width: MediaQuery.of(context).size.width,
+        decoration:
+            BoxDecoration(shape: BoxShape.rectangle, color: Colors.black),
+        child: Center(
+          child: Text(
+            "We had received your order,our customize service will\n contact you soon.Thnaks for shopping with us.",
+            style: TextStyle(color: Colors.white, fontSize: 14),
+          ),
+        ),
+      ),
+    );
+  }
 }

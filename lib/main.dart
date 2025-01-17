@@ -3,19 +3,20 @@ import 'package:assigmentflutterone/screens/detailprodcts.dart';
 import 'package:assigmentflutterone/screens/mainscreen.dart';
 import 'package:assigmentflutterone/screens/orderscreen.dart';
 import 'package:flutter/material.dart';
+
 import 'routes/routes.dart';
 import 'screens/chartsrceen.dart';
 import 'screens/detailocation.dart';
 import 'screens/homescreen.dart';
 import 'screens/loginscreen.dart';
 import 'screens/map_screen.dart';
+import 'screens/myorder.dart';
 import 'screens/payment.dart';
 import 'screens/searchsrceen.dart';
 
 void main() {
   runApp(const MainApp());
 }
-
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -36,6 +37,7 @@ class MainApp extends StatelessWidget {
         Routes.search: (context) => const Searchsrceen(),
         Routes.detaillocation: (context) => const Detailocation(),
         Routes.login: (context) => const Loginscreen(),
+        Routes.myorder: (context) => Myorder(),
       },
     );
   }

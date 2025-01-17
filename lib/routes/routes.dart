@@ -7,8 +7,9 @@ class Routes {
   static const order = "/orderscreen";
   static const map = "/mapscreen";
   static const payment = "/paymentscreen";
-  static const  mains="/mainscreen";
-  static const search="/search";
+  static const mains = "/mainscreen";
+  static const search = "/search";
   static const detaillocation = "/detaillocation";
   static const login = "/loginscreen";
+  static const myorder = "/myorder";
 }
