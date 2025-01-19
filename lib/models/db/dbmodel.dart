@@ -26,9 +26,8 @@ class DbModel {
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE product (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        imageurl TEXT,
+        idInvoice INTEGER PRIMARY KEY AUTOINCREMENT,
+        idproduct int
         datetime TEXT NOT NULL,
         status TEXT
       )

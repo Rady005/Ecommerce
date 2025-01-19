@@ -3,7 +3,6 @@ import 'package:assigmentflutterone/screens/detailprodcts.dart';
 import 'package:assigmentflutterone/screens/mainscreen.dart';
 import 'package:assigmentflutterone/screens/orderscreen.dart';
 import 'package:flutter/material.dart';
-
 import 'routes/routes.dart';
 import 'screens/chartsrceen.dart';
 import 'screens/detailocation.dart';

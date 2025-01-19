@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../routes/routes.dart'; // Import your routes file
@@ -13,7 +12,7 @@ class Myorder extends StatefulWidget {
 class _MyorderState extends State<Myorder> {
   Future<bool> _onWillPop() async {
     //Navigator.pushNamedAndRemoveUntil(context, Routes.mains, (route) => false);
-    Navigator.popUntil(context,(route) => route.settings.name == Routes.mains);
+    Navigator.popUntil(context, (route) => route.settings.name == Routes.mains);
     return false;
   }
 
@@ -25,36 +24,50 @@ class _MyorderState extends State<Myorder> {
         appBar: AppBar(
           title: Text("My Order"),
         ),
-        body: Center(child: ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            return buildSampleorder();
-          },
-        )),
+        body: Center(
+          child: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return buildSampleorder();
+            },
+          ),
+        ),
       ),
     );
   }
 
   Widget buildSampleorder() {
-    return Padding(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(color: Colors.grey, width: 1.0),
+      ),
+      margin: const EdgeInsets.all(8.0),
       padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        height: 95,
-        child: Expanded(
-          child: Column(
+      child: Column(
+        children: [
+          Row(
             children: [
-              Row(children: [Text("#00000058"), Spacer(), Text("\$ 8.00")]),
-              Row(children: [
-                Text("11:06 AM, 01 Jan 2025"),
-                Spacer(),
-                Text("Process"),
-              ]),
-              Row(children: [
-                Image.asset("assets/nofound.jpg", width: 30, height: 30)
-              ]),
-              const Divider(),
+              Text("#00000058"),
+              Spacer(),
+              Text("\$ 8.00"),
             ],
           ),
-        ),
+          const SizedBox(height: 8.0),
+          Row(
+            children: [
+              Text("11:06 AM, 01 Jan 2025"),
+              Spacer(),
+              Text("Process"),
+            ],
+          ),
+          const SizedBox(height: 8.0),
+          Row(
+            children: [
+              Image.asset("assets/nofound.jpg", width: 30, height: 30),
+            ],
+          ),
+        ],
       ),
     );
   }

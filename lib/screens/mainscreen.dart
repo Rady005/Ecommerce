@@ -25,8 +25,8 @@ class _MainscreenState extends State<Mainscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
-        children: _children,
         index: curentindex,
+        children: _children,
       ),
       bottomNavigationBar: CurvedNavigationBar(
         index: curentindex,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:quickalert/quickalert.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/allitemdisplay.dart';
@@ -29,7 +30,9 @@ class _OrderScreenState extends State<OrderScreen> {
   String buttonState = "PLACE ORDER";
   String displayPrice = "";
   String process = "Process";
+  String datatime = "";
   bool isshow = false;
+
   @override
   void initState() {
     super.initState();
@@ -154,19 +157,7 @@ class _OrderScreenState extends State<OrderScreen> {
             Row(
               children: [
                 Expanded(
-                  child: RichText(
-                    text: TextSpan(
-                        // text: "Proccess\n",
-                        style: TextStyle(color: Colors.yellow),
-                        children: [
-                          TextSpan(
-                            text: displayPrice.isEmpty
-                                ? "\$ ${price.toStringAsFixed(2)}"
-                                : displayPrice,
-                            style: TextStyle(fontSize: 14, color: Colors.black),
-                          ),
-                        ]),
-                  ),
+                  child: builddisplaystuts(),
                 ),
                 buildActionButton(),
               ],
@@ -175,6 +166,24 @@ class _OrderScreenState extends State<OrderScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget builddisplaystuts() {
+    if (isshow == true) {
+      return buildproces();
+    }
+    return Text(
+      "\$ ${price.toStringAsFixed(2)}",
+      style: TextStyle(fontSize: 16),
+    );
+  }
+
+  Widget buildproces() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [buildStauts(), Text(datatime)],
     );
   }
 
@@ -205,9 +214,14 @@ class _OrderScreenState extends State<OrderScreen> {
       child: ElevatedButton(
         onPressed: () {
           isshow = false;
-          // setState(() {
-          //   Navigator.pushNamed(context, Routes.myorder);
-          // });
+          QuickAlert.show(
+              context: context,
+              barrierDismissible: false,
+              type: QuickAlertType.success,
+              text: 'Buy  Completed Successfully!',
+              onConfirmBtnTap: () {
+                Navigator.pushNamed(context, Routes.myorder);
+              });
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
@@ -228,15 +242,12 @@ class _OrderScreenState extends State<OrderScreen> {
       child: ElevatedButton(
         onPressed: () {
           setState(() {
+            isshow = false;
             buttonState = "COMPLETE";
+            process = "Complete";
+            datatime =
+                "${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
           });
-          QuickAlert.show(
-              context: context,
-              type: QuickAlertType.success,
-              text: 'Buy  Completed Successfully!',
-              onConfirmBtnTap: () {
-                Navigator.pushNamed(context, Routes.myorder);
-              });
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
@@ -261,8 +272,8 @@ class _OrderScreenState extends State<OrderScreen> {
           _savePreferences();
           setState(() {
             buttonState = "MARK AS RECEIVED";
-            displayPrice =
-                "Process\n${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
+            datatime =
+                "${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
           });
         },
         style: ElevatedButton.styleFrom(
@@ -282,27 +293,24 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   Widget buildItem() {
-    return Expanded(
-      child: SizedBox(
-        height: 70,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Row(children: [
-              Image.asset("assets/Purchase Order@2x.png",
-                  width: 40, height: 40),
-              const SizedBox(width: 5),
-              Text(
-                "Order Summary",
-                style: TextStyle(color: Colors.black),
-              ),
-              SizedBox(width: 5),
-              Text(
-                "(${cart.length} items)",
-                style: TextStyle(color: Colors.black),
-              ),
-            ]),
-          ),
+    return SizedBox(
+      height: 70,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Row(children: [
+            Image.asset("assets/Purchase Order@2x.png", width: 40, height: 40),
+            const SizedBox(width: 5),
+            Text(
+              "Order Summary",
+              style: TextStyle(color: Colors.black),
+            ),
+            SizedBox(width: 5),
+            Text(
+              "(${cart.length} items)",
+              style: TextStyle(color: Colors.black),
+            ),
+          ]),
         ),
       ),
     );
@@ -321,39 +329,37 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   Widget buildwithImage(String imglocation, String text1, String text2) {
-    return Expanded(
-      child: Card(
-        elevation: 2,
-        child: SizedBox(
-          height: 80,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Row(children: [
-              Image.asset(
-                imglocation,
-                width: 30,
-                height: 30,
+    return Card(
+      elevation: 2,
+      child: SizedBox(
+        height: 80,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Row(children: [
+            Image.asset(
+              imglocation,
+              width: 30,
+              height: 30,
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    text1,
+                    style: TextStyle(fontSize: 20),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 8),
+                  Text(text2,
+                      style: TextStyle(fontSize: 12),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis),
+                ],
               ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      text1,
-                      style: TextStyle(fontSize: 20),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 8),
-                    Text(text2,
-                        style: TextStyle(fontSize: 12),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis),
-                  ],
-                ),
-              )
-            ]),
-          ),
+            )
+          ]),
         ),
       ),
     );
@@ -467,87 +473,70 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   Widget buildItemfromCart() {
-    return Expanded(
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: cart.length,
-        itemBuilder: (context, index) {
-          final item = cart[index];
-          var product = item['product'] as Product;
-          var quantity = item['quantity'];
-          return Card(
-            elevation: 6,
-            child: Container(
-              color: Colors.white,
-              width: double.infinity,
-              height: 100,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Image.network(
-                      "http:${product.image}",
-                      width: 70,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: cart.length,
+      itemBuilder: (context, index) {
+        final item = cart[index];
+        var product = item['product'] as Product;
+        var quantity = item['quantity'];
+        return Card(
+          elevation: 6,
+          child: Container(
+            color: Colors.white,
+            width: double.infinity,
+            height: 100,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Image.network(
+                    "http:${product.image}",
+                    width: 70,
+                    height: 80,
+                    fit: BoxFit.cover,
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          "Price: ${product.priceSign} ${product.price}",
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600]),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          "Color: ${item['color']}",
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600]),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        product.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "Price: ${product.priceSign} ${product.price}",
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "Color: ${item['color']}",
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  // Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            item['quantity']++;
-                            _calculateTotal();
-                          },
-                          child: Container(
-                            width: 25,
-                            height: 25,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1,
-                              ),
-                            ),
-                            child: const Center(
-                              child: Text("+"),
-                            ),
-                          ),
-                        ),
-                        Container(
+                ),
+                // Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          item['quantity']++;
+                          _calculateTotal();
+                        },
+                        child: Container(
                           width: 25,
                           height: 25,
                           decoration: BoxDecoration(
@@ -556,39 +545,52 @@ class _OrderScreenState extends State<OrderScreen> {
                               width: 1,
                             ),
                           ),
-                          child: Center(child: Text("$quantity")),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            item['quantity']--;
-                            if (item['quantity'] == 0) {
-                              item['quantity'] = 1;
-                            }
-                            _calculateTotal();
-                          },
-                          child: Container(
-                            width: 25,
-                            height: 25,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1,
-                              ),
-                            ),
-                            child: const Center(
-                              child: Text("-"),
-                            ),
+                          child: const Center(
+                            child: Text("+"),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        width: 25,
+                        height: 25,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1,
+                          ),
+                        ),
+                        child: Center(child: Text("$quantity")),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          item['quantity']--;
+                          if (item['quantity'] == 0) {
+                            item['quantity'] = 1;
+                          }
+                          _calculateTotal();
+                        },
+                        child: Container(
+                          width: 25,
+                          height: 25,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1,
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text("-"),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -596,6 +598,13 @@ class _OrderScreenState extends State<OrderScreen> {
     return Container(
       height: 1,
       color: Colors.white,
+    );
+  }
+
+  Widget buildStauts() {
+    return Text(
+      process,
+      style: TextStyle(color: Colors.yellow, fontSize: 18),
     );
   }
 
