@@ -122,28 +122,28 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                   ),
                 ),
-                Positioned(
-                  right: 5,
-                  child: Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 16,
-                      minHeight: 16,
-                    ),
-                    child: Text(
-                      cart.length.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   right: 5,
+                //   child: Container(
+                //     padding: const EdgeInsets.all(2),
+                //     decoration: const BoxDecoration(
+                //       color: Colors.red,
+                //       shape: BoxShape.circle,
+                //     ),
+                //     constraints: const BoxConstraints(
+                //       minWidth: 16,
+                //       minHeight: 16,
+                //     ),
+                //     // child: Text(
+                //     //   cart.length.toString(),
+                //     //   style: const TextStyle(
+                //     //     color: Colors.white,
+                //     //     fontSize: 12,
+                //     //   ),
+                //     //   textAlign: TextAlign.center,
+                //     // ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -170,7 +170,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-
                           productDs.name,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

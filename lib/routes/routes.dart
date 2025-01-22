@@ -12,4 +12,5 @@ class Routes {
   static const detaillocation = "/detaillocation";
   static const login = "/loginscreen";
   static const myorder = "/myorder";
+  static const register = "/register";
 }

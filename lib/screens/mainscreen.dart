@@ -24,6 +24,7 @@ class _MainscreenState extends State<Mainscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: IndexedStack(
         index: curentindex,
         children: _children,

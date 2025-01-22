@@ -17,6 +17,7 @@ class Homescrenwidget {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      
       backgroundColor: Colors.white,
       toolbarHeight: 80, // Increase the height for better spacing
       title: Row(

@@ -10,19 +10,20 @@ class Product {
   late List<String> tagList;
   bool isFavorite;
   double get priceAskdouble => double.tryParse(price) ?? 0.0;
+  late int id;
 
-  Product({
-    required this.name,
-    required this.price,
-    required this.priceSign,
-    required this.description,
-    required this.image,
-    required this.productColors,
-    required this.productType,
-    required this.tagList,
-    this.qty = 1,
-    this.isFavorite = false,
-  });
+  Product(
+      {required this.name,
+      required this.price,
+      required this.priceSign,
+      required this.description,
+      required this.image,
+      required this.productColors,
+      required this.productType,
+      required this.tagList,
+      this.qty = 1,
+      this.isFavorite = false,
+      required this.id});
 
   Product.fromJson(Map<String, dynamic> data)
       : name = data['name'] ?? "",
@@ -38,7 +39,8 @@ class Product {
                 ?.map((e) => ProductColor.fromJson(e))
                 .toList() ??
             [],
-        isFavorite = data['isFavorite'] ?? false;
+        isFavorite = data['isFavorite'] ?? false,
+        id = data['id'] ?? 0;
 
   Map<String, dynamic> toJson() {
     return {
@@ -51,6 +53,7 @@ class Product {
       'tag_list': tagList,
       'product_colors': productColors.map((e) => e.toJson()).toList(),
       'isFavorite': isFavorite,
+      'id': id,
     };
   }
 }

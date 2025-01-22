@@ -1,16 +1,18 @@
 import 'package:assigmentflutterone/screens/categoryscreen.dart';
 import 'package:assigmentflutterone/screens/detailprodcts.dart';
+import 'package:assigmentflutterone/screens/loginscreen.dart';
 import 'package:assigmentflutterone/screens/mainscreen.dart';
 import 'package:assigmentflutterone/screens/orderscreen.dart';
 import 'package:flutter/material.dart';
+
 import 'routes/routes.dart';
 import 'screens/chartsrceen.dart';
 import 'screens/detailocation.dart';
 import 'screens/homescreen.dart';
-import 'screens/loginscreen.dart';
 import 'screens/map_screen.dart';
 import 'screens/myorder.dart';
 import 'screens/payment.dart';
+import 'screens/register.dart';
 import 'screens/searchsrceen.dart';
 
 void main() {
@@ -23,7 +25,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.mains,
+      initialRoute: Routes.login,
       routes: {
         Routes.home: (context) => const Homescreen(),
         Routes.addtochart: (context) => const MyCart(),
@@ -37,6 +39,7 @@ class MainApp extends StatelessWidget {
         Routes.detaillocation: (context) => const Detailocation(),
         Routes.login: (context) => const Loginscreen(),
         Routes.myorder: (context) => Myorder(),
+        Routes.register: (context) => RegisterScreen()
       },
     );
   }
