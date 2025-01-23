@@ -8,7 +8,7 @@ class Loginscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: LoginWidget().buildBody(context),
+      body: LoginWidget(),
     );
   }
 }

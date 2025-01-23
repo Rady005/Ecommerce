@@ -60,4 +60,13 @@ class LoginHelper {
     );
     return result.isNotEmpty ? result.first : null;
   }
+    static Future<bool> validateUser(String username, String password) async {
+    final db = await database;
+    var result = await db.query(
+      'users',
+      where: 'username = ? AND password = ?',
+      whereArgs: [username, password],
+    );
+    return result.isNotEmpty;
+  }
 }

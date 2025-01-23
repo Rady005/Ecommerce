@@ -1,14 +1,53 @@
+
 import 'package:flutter/material.dart';
 
+import '../../models/db/dbloginmodel.dart';
 import '../../routes/routes.dart';
 
-class LoginWidget {
+class LoginWidget extends StatefulWidget {
+  const LoginWidget({super.key});
+
+  @override
+  _LoginWidgetState createState() => _LoginWidgetState();
+}
+
+class _LoginWidgetState extends State<LoginWidget> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 
-  Widget buildBody(BuildContext context) {
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _login() async {
+    if (_formKey.currentState!.validate()) {
+      String username = _usernameController.text;
+      String password = _passwordController.text;
+
+      bool isValidUser = await LoginHelper.validateUser(username, password);
+
+      if (isValidUser) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.mains,
+          (route) => false,
+        );
+
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Invalid username or password")),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Form(
         key: _formKey,
@@ -23,20 +62,92 @@ class LoginWidget {
                 backgroundImage: AssetImage("assets/iconapp.jpg"),
               ),
             ),
-            SizedBox(
-              height: 15,
-            ),
+            SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.all(25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  buildTextFormField(),
+                  TextFormField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(
+                      hintText: "Username",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Username is required";
+                      }
+                      return null;
+                    },
+                  ),
                   SizedBox(height: 20),
-                  buildPasswordFormField(),
+                  StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return TextFormField(
+                        controller: _passwordController,
+                        obscureText: !_isPasswordVisible,
+                        decoration: InputDecoration(
+                          hintText: "Password",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide:
+                                BorderSide(color: Colors.blue, width: 2.0),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Password is required";
+                          } else if (value.length < 6) {
+                            return "Password must be at least 6 characters long";
+                          }
+                          return null;
+                        },
+                      );
+                    },
+                  ),
                   SizedBox(height: 20),
-                  buildButton(context),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        foregroundColor: Colors.white,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2.0),
+                        ),
+                      ),
+                      child: Text(
+                        "Login",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -47,7 +158,7 @@ class LoginWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Don't have Account ? ",
+                    "Don't have an account? ",
                     style: TextStyle(fontSize: 16),
                   ),
                   GestureDetector(
@@ -68,101 +179,6 @@ class LoginWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget buildButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              Routes.mains,
-              (route) => false,
-            );
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blueAccent,
-          foregroundColor: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(2.0),
-          ),
-        ),
-        child: Text(
-          "Login",
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
-    );
-  }
-
-  Widget buildTextFormField() {
-    return TextFormField(
-      controller: _emailController,
-      autofocus: true,
-      decoration: InputDecoration(
-        hintText: "Email or phone number",
-        hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: Colors.white),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: Colors.blue, width: 2.0),
-        ),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return "Email or phone number is required";
-        }
-        return null;
-      },
-    );
-  }
-
-  Widget buildPasswordFormField() {
-    return StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState) {
-        return TextFormField(
-          controller: _passwordController,
-          obscureText: !_isPasswordVisible,
-          decoration: InputDecoration(
-            hintText: "Password",
-            hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0),
-              borderSide: BorderSide(color: Colors.white),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0),
-              borderSide: BorderSide(color: Colors.blue, width: 2.0),
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(
-                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-              ),
-              onPressed: () {
-                setState(() {
-                  _isPasswordVisible = !_isPasswordVisible;
-                });
-              },
-            ),
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Password is required";
-            } else if (value.length < 6) {
-              return "Password must be at least 6 characters long";
-            }
-            return null;
-          },
-        );
-      },
     );
   }
 }
