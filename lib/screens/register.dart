@@ -47,6 +47,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         //       content:
         //           Text("Username already exists. Please choose another one.")),
         // );
+
+
+
       } else {
         // Register the user
         await LoginHelper.registerUser(username, password, firstName, lastName);
@@ -57,6 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         // Show success dialog
         AwesomeDialog(
+          // ignore: use_build_context_synchronously
           context: context,
           dialogType: DialogType.success,
           animType: AnimType.rightSlide,

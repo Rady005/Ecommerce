@@ -1,5 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/db/dbloginmodel.dart';
 import '../../routes/routes.dart';
@@ -8,6 +10,7 @@ class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginWidgetState createState() => _LoginWidgetState();
 }
 
@@ -32,12 +35,14 @@ class _LoginWidgetState extends State<LoginWidget> {
       bool isValidUser = await LoginHelper.validateUser(username, password);
 
       if (isValidUser) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isRegistered', true);
+       
         Navigator.pushNamedAndRemoveUntil(
           context,
           Routes.mains,
           (route) => false,
         );
-
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Invalid username or password")),

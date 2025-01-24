@@ -321,8 +321,11 @@ class _SettingScreenState extends State<SettingScreen> {
                   title: "Log out",
                   onTap: () async {
                     final prefs = await SharedPreferences.getInstance();
-                    await prefs.setBool("isLoggedIn", false);
+                    await prefs.remove("isRegistered");
+                    await prefs.remove("isLoggedIn");
+                    
                     Navigator.pushNamedAndRemoveUntil(
+                      // ignore: use_build_context_synchronously
                       context,
                       Routes.login,
                       (route) => false,

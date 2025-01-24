@@ -28,13 +28,14 @@ void main() async {
 class MainApp extends StatelessWidget {
   final bool isRegistered;
   final bool isLoggedIn;
-  const MainApp({super.key, required this.isRegistered, required this.isLoggedIn});
+  const MainApp(
+      {super.key, required this.isRegistered, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: isRegistered && isLoggedIn ? Routes.mains : Routes.login,
+      initialRoute: isRegistered || isLoggedIn ? Routes.mains : Routes.login,
       routes: {
         Routes.home: (context) => const Homescreen(),
         Routes.addtochart: (context) => const MyCart(),
