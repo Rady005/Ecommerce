@@ -24,7 +24,6 @@ class _MainscreenState extends State<Mainscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: IndexedStack(
         index: curentindex,
         children: _children,
@@ -32,9 +31,11 @@ class _MainscreenState extends State<Mainscreen> {
       bottomNavigationBar: CurvedNavigationBar(
         index: curentindex,
         onTap: (value) {
-          setState(() {
-            curentindex = value;
-          });
+          setState(
+            () {
+              curentindex = value;
+            },
+          );
         },
         backgroundColor: Colors.transparent,
         color: Colors.pinkAccent,

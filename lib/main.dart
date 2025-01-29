@@ -21,6 +21,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final bool isRegistered = prefs.getBool('isRegistered') ?? false;
   final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+ 
 
   runApp(MainApp(isRegistered: isRegistered, isLoggedIn: isLoggedIn));
 }

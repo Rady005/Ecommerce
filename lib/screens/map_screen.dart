@@ -93,6 +93,7 @@ class _MapScreenState extends State<MapScreen> {
         alignment: Alignment.center,
         children: [
           GoogleMap(
+            
             initialCameraPosition: initialCameraPosition,
             onMapCreated: (controller) => mapController = controller,
             onCameraMove: (position) {

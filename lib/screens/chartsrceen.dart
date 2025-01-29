@@ -151,6 +151,12 @@ class _MyCartState extends State<MyCart> {
         backgroundColor: Colors.pinkAccent,
         title: const Text("Cart", style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.delete),
+          )
+        ],
       ),
       body: cart.isNotEmpty
           ? Card(
@@ -332,7 +338,7 @@ class _MyCartState extends State<MyCart> {
             children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  "Total : \$ ${price.toStringAsFixed(3)}",
+                  "Total : \$ ${price.toStringAsFixed(2)}",
                   style: TextStyle(fontSize: 18),
                 ),
                 Text(

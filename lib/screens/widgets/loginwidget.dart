@@ -19,6 +19,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
+  
 
   @override
   void dispose() {
@@ -37,6 +38,8 @@ class _LoginWidgetState extends State<LoginWidget> {
       if (isValidUser) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isRegistered', true);
+
+          
        
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -44,9 +47,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           (route) => false,
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Invalid username or password")),
-        );
+
       }
     }
   }
