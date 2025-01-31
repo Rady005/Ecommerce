@@ -1,65 +1,50 @@
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DbModel {
-  DbModel._privateConstructor();
-  static final DbModel instance = DbModel._privateConstructor();
+class Order {
+  final String id;
+  final String status;
+  final DateTime datetime;
+  final String image;
+  final String name;
+  final String price;
 
-  static Database? _database;
+  Order({
+    required this.id,
+    required this.status,
+    required this.datetime,
+    required this.image,
+    required this.name,
+    required this.price,
+  });
 
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'status': status,
+      'datetime': datetime.toIso8601String(),
+      'image': image,
+      'name': name,
+      'price': price,
+    };
   }
 
-  Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'product.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _onCreate,
+  static Future<Database> get database async {
+    return openDatabase(
+      join(await getDatabasesPath(), 'orders_database.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE orders(id TEXT PRIMARY KEY, status TEXT, datetime TEXT, image TEXT, name TEXT, price TEXT)',
+        );
+      },
+      version: 2,
     );
   }
 
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE product (
-        idInvoice INTEGER PRIMARY KEY AUTOINCREMENT,
-        idproduct int
-        datetime TEXT NOT NULL,
-        status TEXT
-      )
-    ''');
-  }
-
-  Future<int> insertProduct(Map<String, dynamic> product) async {
-    Database db = await instance.database;
-    return await db.insert('product', product);
-  }
-
-  Future<List<Map<String, dynamic>>> fetchProducts() async {
-    Database db = await instance.database;
-    return await db.query('product');
-  }
-
-  Future<int> updateProduct(Map<String, dynamic> product, int id) async {
-    Database db = await instance.database;
-    return await db.update(
-      'product',
-      product,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
-
-  Future<int> deleteProduct(int id) async {
-    Database db = await instance.database;
-    return await db.delete(
-      'product',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+  Future<void> saveToDatabase() async {
+    final db = await Order.database;
+    await db.insert('orders', toMap(),
+        // conflictAlgorithm: ConflictAlgorithm.replace,
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }
