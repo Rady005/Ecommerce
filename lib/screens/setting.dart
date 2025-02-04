@@ -144,6 +144,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   onTap: () async {
                     final prefs = await SharedPreferences.getInstance();
                     await prefs.remove("isRegistered");
+                    
                     await prefs.remove("isLoggedIn");
 
                     QuickAlert.show(

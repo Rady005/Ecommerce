@@ -34,7 +34,7 @@ class _OrderScreenState extends State<OrderScreen> {
   String datatime = "";
   bool isshow = false;
 
-  Future<void> saveOrder(Product product, int quantity) async {
+  Future<void> saveOrder(Product product, int quantity, String imgList) async {
     var now = DateTime.now();
     final formattedDateTime = DateFormat('yyyyMMddHHmmsss').format(now);
 
@@ -42,7 +42,7 @@ class _OrderScreenState extends State<OrderScreen> {
       id: formattedDateTime,
       status: process,
       datetime: now,
-      image: product.image,
+      image: imgList,
       name: product.name,
       price: product.price.toString(),
     );
@@ -55,7 +55,7 @@ class _OrderScreenState extends State<OrderScreen> {
     for (var item in cart) {
       var product = item['product'] as Product;
       var quantity = item['quantity'];
-      saveOrder(product, quantity);
+      saveOrder(product, quantity, product.image);
     }
     // Optionally, clear the cart after placing the order
     // setState(() {

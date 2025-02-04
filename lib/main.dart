@@ -34,7 +34,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: isRegistered || isLoggedIn ? Routes.mains : Routes.login,
+      initialRoute: isRegistered || 
+      isLoggedIn ? Routes.mains : Routes.login,
       routes: {
         Routes.home: (context) => const Homescreen(),
         Routes.addtochart: (context) => const MyCart(),
