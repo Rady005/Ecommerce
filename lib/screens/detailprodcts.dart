@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../models/allitemdisplay.dart';
 import '../models/wishlist.dart';
@@ -107,6 +109,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               children: [
                 GestureDetector(
                   onTap: () async {
+
                     Navigator.pushNamed(
                       context,
                       Routes.addtochart,
@@ -193,7 +196,19 @@ class _ProductDetailsState extends State<ProductDetails> {
                       });
                       if (isFav) {
                         await wish.addProductToWishList(productDs);
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          CustomSnackBar.success(
+                            message: "Add to Wishlist successfully.",
+                          ),
+                        );
                       } else {
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          CustomSnackBar.error(
+                            message: "Add to Wishlist successfully.",
+                          ),
+                        );
                         await wish.removeProductFromWishList(productDs);
                       }
                     },

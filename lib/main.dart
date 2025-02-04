@@ -5,18 +5,15 @@ import 'package:assigmentflutterone/screens/mainscreen.dart';
 import 'package:assigmentflutterone/screens/orderscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'routes/routes.dart';
 import 'screens/chartsrceen.dart';
 import 'screens/detailocation.dart';
 import 'screens/homescreen.dart';
 import 'screens/map_screen.dart';
-
 import 'screens/myorder.dart';
 import 'screens/payment.dart';
 import 'screens/register.dart';
 import 'screens/searchsrceen.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();

@@ -17,7 +17,7 @@ class _DetailocationState extends State<Detailocation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choose Location'),
+        title: const Text('Find your Location'),
       ),
       body: Column(
         children: [

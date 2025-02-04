@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../models/wishlist.dart';
 import 'allproduct.dart';
@@ -20,7 +22,7 @@ class _WishlistscreenState extends State<Wishlistscreen> {
   }
 
   Future<void> _loadWishlist() async {
- await wish.loadWishList();
+    await wish.loadWishList();
     setState(() {
       wish.wishList = wish.wishList;
     });
@@ -49,7 +51,7 @@ class _WishlistscreenState extends State<Wishlistscreen> {
               onRefresh: _loadWishlist,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: GridView.builder(  
+                child: GridView.builder(
                   itemCount: wish.wishList.length,
                   itemBuilder: (context, index) {
                     var product = wish.wishList[index];
@@ -120,11 +122,11 @@ class _WishlistscreenState extends State<Wishlistscreen> {
                                           .removeProductFromWishList(product);
                                       setState(
                                         () {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  "Product removed from wishlist"),
+                                          showTopSnackBar(
+                                            Overlay.of(context),
+                                            CustomSnackBar.success(
+                                              message:
+                                                  "Add to cart successfully.",
                                             ),
                                           );
                                         },

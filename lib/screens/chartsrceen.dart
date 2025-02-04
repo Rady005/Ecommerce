@@ -140,6 +140,18 @@ class _MyCartState extends State<MyCart> {
     _saveCart();
   }
 
+  void _removeSelectedItems() {
+    setState(() {
+      cart.removeWhere((item) => item['selected']);
+      _calculateTotal();
+    });
+    _saveCart();
+  }
+
+  bool get _hasSelectedItems {
+    return cart.any((item) => item['selected']);
+  }
+
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
@@ -151,12 +163,14 @@ class _MyCartState extends State<MyCart> {
         backgroundColor: Colors.pinkAccent,
         title: const Text("Cart", style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.delete),
-          )
-        ],
+        actions: _hasSelectedItems
+            ? [
+                IconButton(
+                  onPressed: _removeSelectedItems,
+                  icon: Icon(Icons.delete),
+                )
+              ]
+            : null,
       ),
       body: cart.isNotEmpty
           ? Card(
@@ -327,52 +341,57 @@ class _MyCartState extends State<MyCart> {
                 child: Image.asset("assets/product-not-found.jpg"),
               ),
             ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0,
-        color: Colors.white,
-        child: Container(
-          color: Colors.white,
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  "Total : \$ ${price.toStringAsFixed(2)}",
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  " Items  : $itemCount",
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                )
-              ]),
-              Spacer(),
-              SizedBox(
-                width: screenWidth * 0.5,
-                child: ElevatedButton(
-                  onPressed: cart.isEmpty
-                      ? null
-                      : () {
-                          _checkout();
-                        },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.pinkAccent,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+      bottomNavigationBar: _hasSelectedItems
+          ? BottomAppBar(
+              elevation: 0,
+              color: Colors.white,
+              child: Container(
+                color: Colors.white,
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Total : \$ ${price.toStringAsFixed(2)}",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Text(
+                          " Items  : $itemCount",
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        )
+                      ],
                     ),
-                  ),
-                  child: const Text(
-                    "Checkout",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
+                    Spacer(),
+                    SizedBox(
+                      width: screenWidth * 0.5,
+                      child: ElevatedButton(
+                        onPressed: cart.isEmpty
+                            ? null
+                            : () {
+                                _checkout();
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pinkAccent,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        child: const Text(
+                          "Checkout",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : null,
     );
   }
 }
