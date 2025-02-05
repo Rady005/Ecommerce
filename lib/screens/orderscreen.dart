@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../models/allitemdisplay.dart';
 import '../models/cupon.dart';
@@ -33,35 +35,90 @@ class _OrderScreenState extends State<OrderScreen> {
   String process = "Process";
   String datatime = "";
   bool isshow = false;
+  // Future<void> saveOrder(Product product, int quantity, String imgList) async {
+  //   var now = DateTime.now();
+  //   final formattedDateTime = DateFormat('yyyyMMddHHmmsss').format(now);
 
-  Future<void> saveOrder(Product product, int quantity, String imgList) async {
+  //   final order = Order(
+  //     id: formattedDateTime,
+  //     status: process,
+  //     datetime: now,
+  //     name: product.name,
+  //     price: price.toString(), // Use the calculated price
+  //   );
+
+  //   await order.saveToDatabase();
+
+  //   final orderDetails = OrderDetails(
+  //     id: formattedDateTime,
+  //     idproduct: product.id,
+  //     productname: product.name,
+  //     productprice: product.price.toString(),
+  //     qtyproduct: quantity,
+  //     image: imgList,
+  //     orderId: order.id,
+  //   );
+
+  //   print("iamgeURL : $imgList");
+  //   await orderDetails.saveToDatabase();
+  // }
+  Future<void> saveOrder(
+      List<Map<String, dynamic>> cart, String invoiceId) async {
     var now = DateTime.now();
     final formattedDateTime = DateFormat('yyyyMMddHHmmsss').format(now);
 
-    final order = Order(
-      id: formattedDateTime,
-      status: process,
-      datetime: now,
-      image: imgList,
-      name: product.name,
-      price: product.price.toString(),
-    );
-
-    print("imageuri: ${product.image}");
-    await order.saveToDatabase();
-  }
-
-  void placeOrder() {
+    // Calculate the total price for the entire order
+    double totalPrice = 0;
     for (var item in cart) {
       var product = item['product'] as Product;
       var quantity = item['quantity'];
-      saveOrder(product, quantity, product.image);
+      totalPrice += product.priceAskdouble * quantity; // Use priceAskdouble
     }
+
+    final order = Order(
+      id: invoiceId,
+      status: 'Processing',
+      datetime: now,
+      name: 'Order $invoiceId',
+      price: totalPrice.toString(), // Use the calculated total price
+    );
+
+    await order.saveToDatabase();
+
+    for (var i = 0; i < cart.length; i++) {
+      var product = cart[i]['product'] as Product;
+      var quantity = cart[i]['quantity'];
+      var imgList = product.image;
+
+      // Split the image list if it contains multiple URLs
+      List<String> imageUrls = imgList.split(',');
+
+      for (var j = 0; j < imageUrls.length; j++) {
+        final orderDetails = OrderDetails(
+          id: '$invoiceId-$i-$j', // Generate a unique id for each entry
+          idproduct: product.id,
+          productname: product.name,
+          productprice: product.price.toString(),
+          qtyproduct: quantity,
+          image: imageUrls[j].trim(), // Use the individual image URL
+          orderId: order.id,
+        );
+
+        print("imageURL: ${imageUrls[j].trim()}");
+        await orderDetails.saveToDatabase();
+      }
+    }
+  }
+
+  void placeOrder() {
+    var invoiceId = DateFormat('yyyyMMddHHmmsss').format(DateTime.now());
+    saveOrder(cart, invoiceId);
     // Optionally, clear the cart after placing the order
     // setState(() {
     //   cart.clear();
     // });
   }
+
 
   @override
   void initState() {
@@ -482,22 +539,21 @@ class _OrderScreenState extends State<OrderScreen> {
           cupon = result;
           _calculateTotal();
         });
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Coupon applied successfully!'),
-            backgroundColor: Colors.green,
+        showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.success(
+            message: "Applied Cupon successfully.",
           ),
         );
       } else {
         setState(() {
           cupon = "Enter your cupon code";
         });
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Invalid coupon code!'),
-            backgroundColor: Colors.red,
+
+        showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.error(
+            message: "Invalid Cupon Code!",
           ),
         );
       }
@@ -628,127 +684,6 @@ class _OrderScreenState extends State<OrderScreen> {
       },
     );
   }
-  // Widget buildItemfromCart() {
-  //   return ListView.builder(
-  //     shrinkWrap: true,
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     itemCount: cart.length,
-  //     itemBuilder: (context, index) {
-  //       final item = cart[index];
-  //       var product = item['product'] as Product;
-  //       var quantity = item['quantity'];
-  //       return Card(
-  //         elevation: 6,
-  //         child: Container(
-  //           color: Colors.white,
-  //           width: double.infinity,
-  //           height: 100,
-  //           child: Row(
-  //             children: [
-  //               Padding(
-  //                 padding: const EdgeInsets.only(left: 5),
-  //                 child: Image.network(
-  //                   "http:${product.image}",
-  //                   width: 70,
-  //                   height: 80,
-  //                   fit: BoxFit.cover,
-  //                 ),
-  //               ),
-  //               const SizedBox(width: 16),
-  //               Expanded(
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     Text(
-  //                       product.name,
-  //                       maxLines: 1,
-  //                       overflow: TextOverflow.ellipsis,
-  //                       style: TextStyle(
-  //                           fontSize: 16, fontWeight: FontWeight.bold),
-  //                     ),
-  //                     const SizedBox(height: 4),
-  //                     Text(
-  //                       "Price: ${product.priceSign} ${product.price}",
-  //                       style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-  //                     ),
-  //                     const SizedBox(height: 4),
-  //                     Text(
-  //                       "Color: ${item['color']}",
-  //                       style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-  //                       overflow: TextOverflow.ellipsis,
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               // Spacer(),
-  //               Padding(
-  //                 padding: const EdgeInsets.all(8),
-  //                 child: Row(
-  //                   crossAxisAlignment: CrossAxisAlignment.end,
-  //                   mainAxisAlignment: MainAxisAlignment.end,
-  //                   children: [
-  //                     GestureDetector(
-  //                       onTap: () {
-  //                         item['quantity']++;
-  //                         _calculateTotal();
-  //                       },
-  //                       child: Container(
-  //                         width: 25,
-  //                         height: 25,
-  //                         decoration: BoxDecoration(
-  //                           border: Border.all(
-  //                             color: Colors.black,
-  //                             width: 1,
-  //                           ),
-  //                         ),
-  //                         child: const Center(
-  //                           child: Text("+"),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       width: 25,
-  //                       height: 25,
-  //                       decoration: BoxDecoration(
-  //                         border: Border.all(
-  //                           color: Colors.black,
-  //                           width: 1,
-  //                         ),
-  //                       ),
-  //                       child: Center(child: Text("$quantity")),
-  //                     ),
-  //                     GestureDetector(
-  //                       onTap: () {
-  //                         item['quantity']--;
-  //                         if (item['quantity'] == 0) {
-  //                           item['quantity'] = 1;
-  //                         }
-  //                         _calculateTotal();
-  //                       },
-  //                       child: Container(
-  //                         width: 25,
-  //                         height: 25,
-  //                         decoration: BoxDecoration(
-  //                           border: Border.all(
-  //                             color: Colors.black,
-  //                             width: 1,
-  //                           ),
-  //                         ),
-  //                         child: const Center(
-  //                           child: Text("-"),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   Widget buildEmptycontainer() {
     return Container(

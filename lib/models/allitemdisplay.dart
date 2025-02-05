@@ -1,3 +1,4 @@
+
 class Product {
   late String name;
   late String price;
@@ -12,18 +13,19 @@ class Product {
   double get priceAskdouble => double.tryParse(price) ?? 0.0;
   late int id;
 
-  Product(
-      {required this.name,
-      required this.price,
-      required this.priceSign,
-      required this.description,
-      required this.image,
-      required this.productColors,
-      required this.productType,
-      required this.tagList,
-      this.qty = 1,
-      this.isFavorite = false,
-      required this.id});
+  Product({
+    required this.name,
+    required this.price,
+    required this.priceSign,
+    required this.description,
+    required this.image,
+    required this.productColors,
+    required this.productType,
+    required this.tagList,
+    this.qty = 1,
+    this.isFavorite = false,
+    required this.id,
+  });
 
   Product.fromJson(Map<String, dynamic> data)
       : name = data['name'] ?? "",
@@ -33,8 +35,7 @@ class Product {
         image = data['api_featured_image'] ?? "",
         productType = data['product_type'] ?? "",
         tagList =
-            (data['tag_list'] as List?)?.map((e) => e.toString()).toList() ??
-                [],
+            (data['tag_list'] as List?)?.map((e) => e.toString()).toList() ?? [],
         productColors = (data['product_colors'] as List?)
                 ?.map((e) => ProductColor.fromJson(e))
                 .toList() ??

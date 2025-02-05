@@ -109,7 +109,6 @@ class _ProductDetailsState extends State<ProductDetails> {
               children: [
                 GestureDetector(
                   onTap: () async {
-
                     Navigator.pushNamed(
                       context,
                       Routes.addtochart,
@@ -306,6 +305,12 @@ class _ProductDetailsState extends State<ProductDetails> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    CustomSnackBar.success(
+                      message: "Add to Wishlist successfully.",
+                    ),
+                  );
                   setState(() {
                     qty += 1;
                   });
