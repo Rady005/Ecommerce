@@ -28,6 +28,8 @@ dependencies:
   awesome_dialog: ^3.2.1
   top_snackbar_flutter: ^3.2.0
   flashy_tab_bar2: ^0.0.10
+  flame_splash_screen: ^0.3.1
+  flame: ^1.23.0
 
 
   

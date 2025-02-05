@@ -13,4 +13,5 @@ class Routes {
   static const login = "/loginscreen";
   static const myorder = "/myorder";
   static const register = "/register";
+  static const splash = "/splash";
 }

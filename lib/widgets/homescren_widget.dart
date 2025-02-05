@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/listproduct.dart';
-import '../../models/resource/slide.dart';
-import '../../routes/routes.dart';
-import '../allproduct.dart';
+import '../models/listproduct.dart';
+import '../models/resource/slide.dart';
+import '../routes/routes.dart';
+import '../screens/allproduct.dart';
 import 'category.dart';
 
 class Homescrenwidget {

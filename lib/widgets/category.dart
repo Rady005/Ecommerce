@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../models/allitemdisplay.dart';
-import '../../models/resource/product_sliver.dart';
-import '../../models/resource/product_type.dart';
-import '../../routes/routes.dart';
+import '../models/allitemdisplay.dart';
+import '../models/resource/product_sliver.dart';
+import '../models/resource/product_type.dart';
+import '../routes/routes.dart';
 class Category extends StatefulWidget {
   const Category({super.key});
 

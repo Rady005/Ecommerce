@@ -6,7 +6,7 @@ import 'package:shimmer/shimmer.dart';
 import '../models/allitemdisplay.dart';
 import '../models/selectedlist.dart';
 import '../routes/routes.dart';
-import 'widgets/cartservice.dart';
+import '../../widgets/cartservice.dart';
 
 class MyCart extends StatefulWidget {
   const MyCart({super.key});

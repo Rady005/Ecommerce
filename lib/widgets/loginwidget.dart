@@ -1,10 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/db/dbloginmodel.dart';
-import '../../routes/routes.dart';
+import '../models/db/dbloginmodel.dart';
+import '../routes/routes.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -19,7 +18,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-  
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -39,15 +38,15 @@ class _LoginWidgetState extends State<LoginWidget> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isRegistered', true);
 
-          
-       
         Navigator.pushNamedAndRemoveUntil(
           context,
           Routes.mains,
           (route) => false,
         );
       } else {
-
+        setState(() {
+          _errorMessage = "Incorrect username or password";
+        });
       }
     }
   }
@@ -135,6 +134,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     },
                   ),
                   SizedBox(height: 20),
+                  if (_errorMessage != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        _errorMessage!,
+                        style: TextStyle(color: Colors.red, fontSize: 14),
+                      ),
+                    ),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

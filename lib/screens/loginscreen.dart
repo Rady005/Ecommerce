@@ -1,4 +1,4 @@
-import 'package:assigmentflutterone/screens/widgets/loginwidget.dart';
+import '../../widgets/loginwidget.dart';
 import 'package:flutter/material.dart';
 
 class Loginscreen extends StatelessWidget {

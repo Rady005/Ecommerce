@@ -6,7 +6,7 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../models/allitemdisplay.dart';
 import '../models/wishlist.dart';
 import '../routes/routes.dart';
-import 'widgets/cartservice.dart';
+import '../../widgets/cartservice.dart';
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({super.key});

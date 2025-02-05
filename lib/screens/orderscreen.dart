@@ -11,8 +11,8 @@ import '../models/cupon.dart';
 import '../models/db/dbmodel.dart';
 import '../routes/routes.dart';
 import 'map_screen.dart';
-import 'widgets/coupon.dart';
-import 'widgets/modelbottomsheet.dart';
+import '../../widgets/coupon.dart';
+import '../../widgets/modelbottomsheet.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
