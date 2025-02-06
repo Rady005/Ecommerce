@@ -30,6 +30,7 @@ dependencies:
   flashy_tab_bar2: ^0.0.10
   flame_splash_screen: ^0.3.1
   flame: ^1.23.0
+  animated_text_kit: ^4.2.3
 
 
   
@@ -49,6 +50,7 @@ flutter:
     - assets/
     - assets/debit/
     - assets/svg/
+
 
 
 flutter_icons:

@@ -35,37 +35,11 @@ class _OrderScreenState extends State<OrderScreen> {
   String process = "Process";
   String datatime = "";
   bool isshow = false;
-  // Future<void> saveOrder(Product product, int quantity, String imgList) async {
-  //   var now = DateTime.now();
-  //   final formattedDateTime = DateFormat('yyyyMMddHHmmsss').format(now);
 
-  //   final order = Order(
-  //     id: formattedDateTime,
-  //     status: process,
-  //     datetime: now,
-  //     name: product.name,
-  //     price: price.toString(), // Use the calculated price
-  //   );
-
-  //   await order.saveToDatabase();
-
-  //   final orderDetails = OrderDetails(
-  //     id: formattedDateTime,
-  //     idproduct: product.id,
-  //     productname: product.name,
-  //     productprice: product.price.toString(),
-  //     qtyproduct: quantity,
-  //     image: imgList,
-  //     orderId: order.id,
-  //   );
-
-  //   print("iamgeURL : $imgList");
-  //   await orderDetails.saveToDatabase();
-  // }
   Future<void> saveOrder(
       List<Map<String, dynamic>> cart, String invoiceId) async {
     var now = DateTime.now();
-    final formattedDateTime = DateFormat('yyyyMMddHHmmsss').format(now);
+    // final formattedDateTime = DateFormat('yyyyMMddHHmmsss').format(now);
 
     // Calculate the total price for the entire order
     double totalPrice = 0;
