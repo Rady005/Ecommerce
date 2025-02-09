@@ -17,7 +17,6 @@ class Homescrenwidget {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      
       backgroundColor: Colors.white,
       toolbarHeight: 80, // Increase the height for better spacing
       title: Row(
@@ -106,10 +105,8 @@ class Homescrenwidget {
               buildCarouselSilder(context),
               const SizedBox(height: 5),
               const Divider(),
-
               const Category(),
               const Divider(),
-
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Text(
@@ -117,7 +114,8 @@ class Homescrenwidget {
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
               ),
-              AllProduct(products: products), // Pass the products list here
+              AllProduct(products: products),
+              TextButton(onPressed: () {}, child: Text("View more")),
             ],
           ),
         ),

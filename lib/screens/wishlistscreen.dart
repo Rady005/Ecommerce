@@ -33,12 +33,19 @@ class _WishlistscreenState extends State<Wishlistscreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "My Favorite",
+          "My Wishlist",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.pinkAccent,
         centerTitle: true,
         elevation: 3,
+        actions: [
+          IconButton(
+              onPressed: () {
+                _loadWishlist();
+              },
+              icon: Icon(Icons.refresh,color: Colors.white,)),
+        ],
       ),
       body: wish.wishList.isEmpty
           ? Padding(

@@ -196,6 +196,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       if (isFav) {
                         await wish.addProductToWishList(productDs);
                         showTopSnackBar(
+                          // ignore: use_build_context_synchronously
                           Overlay.of(context),
                           CustomSnackBar.success(
                             message: "Add to Wishlist successfully.",

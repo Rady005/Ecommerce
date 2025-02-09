@@ -6,6 +6,9 @@ version: 0.1.0
 environment:
   sdk: ^3.6.0
 
+
+
+
 dependencies:
   flutter:
     sdk: flutter
@@ -31,6 +34,7 @@ dependencies:
   flame_splash_screen: ^0.3.1
   flame: ^1.23.0
   animated_text_kit: ^4.2.3
+  animations: ^2.0.11
 
 
   
@@ -42,6 +46,16 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_svg_provider: ^1.0.7
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/logoApp .png"
+  adaptive_icon_background: "#FFFFFF" 
+  adaptive_icon_foreground: "assets/logoApp .png"
+  min_sdk_android: 21
+
+
 
 
 flutter:
@@ -52,8 +66,3 @@ flutter:
     - assets/svg/
 
 
-
-flutter_icons:
-  android: true
-  ios: true
-  image_path: "assets/iconapp.jpg"

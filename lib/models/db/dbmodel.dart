@@ -1,5 +1,3 @@
-
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -41,6 +39,12 @@ class Order {
       },
       version: 3,
     );
+  }
+
+  Future<void> updateStatus(String newStatus) async {
+    final db = await Order.database;
+    await db.update('orders', {'status': newStatus},
+        where: 'id=?', whereArgs: [id]);
   }
 
   Future<void> saveToDatabase() async {

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,6 +38,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         await prefs.setBool('isRegistered', true);
 
         Navigator.pushNamedAndRemoveUntil(
+          // ignore: use_build_context_synchronously
           context,
           Routes.mains,
           (route) => false,

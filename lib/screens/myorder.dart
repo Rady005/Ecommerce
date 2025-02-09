@@ -90,7 +90,7 @@ class _MyorderState extends State<Myorder> {
                     ),
                     title: Text(orderDetail.productname),
                     subtitle: Text("Quantity: ${orderDetail.qtyproduct}"),
-                    trailing: Text("\$${orderDetail.productprice}"),
+                    trailing: Text("\$ ${orderDetail.productprice}"),
                   );
                 }),
               ],
@@ -203,9 +203,7 @@ class _MyorderState extends State<Myorder> {
                                       Spacer(),
                                       Text(
                                         " ${order.status}",
-                                        style: TextStyle(
-                                            color: Colors.amberAccent,
-                                            fontSize: 16),
+                                        style: order.status=="Process" ? TextStyle(color: Colors.amberAccent) : TextStyle(color: Colors.green),
                                       ),
                                     ],
                                   ),

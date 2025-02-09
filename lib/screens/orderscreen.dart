@@ -6,13 +6,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../../widgets/coupon.dart';
+import '../../widgets/modelbottomsheet.dart';
 import '../models/allitemdisplay.dart';
 import '../models/cupon.dart';
 import '../models/db/dbmodel.dart';
 import '../routes/routes.dart';
 import 'map_screen.dart';
-import '../../widgets/coupon.dart';
-import '../../widgets/modelbottomsheet.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -35,6 +35,7 @@ class _OrderScreenState extends State<OrderScreen> {
   String process = "Process";
   String datatime = "";
   bool isshow = false;
+  String orderId = "";
 
   Future<void> saveOrder(
       List<Map<String, dynamic>> cart, String invoiceId) async {
@@ -46,14 +47,16 @@ class _OrderScreenState extends State<OrderScreen> {
     for (var item in cart) {
       var product = item['product'] as Product;
       var quantity = item['quantity'];
-      totalPrice += product.priceAskdouble * quantity; // Use priceAskdouble
+      totalPrice += product.priceAskdouble * quantity;
     }
-
+    setState(() {
+      orderId = invoiceId;
+    });
     final order = Order(
       id: invoiceId,
-      status: 'Processing',
+      status: process,
       datetime: now,
-      name: 'Order $invoiceId',
+      name: ' $invoiceId',
       price: totalPrice.toString(), // Use the calculated total price
     );
 
@@ -78,21 +81,28 @@ class _OrderScreenState extends State<OrderScreen> {
           orderId: order.id,
         );
 
-        print("imageURL: ${imageUrls[j].trim()}");
+        // print("imageURL: ${imageUrls[j].trim()}");
         await orderDetails.saveToDatabase();
       }
     }
+  }
+
+  Future<void> updateStatus(String id, String status) async {
+    final db = await Order.database;
+    await db.update(
+      'orders',
+      {'status': status},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   void placeOrder() {
     var invoiceId = DateFormat('yyyyMMddHHmmsss').format(DateTime.now());
     saveOrder(cart, invoiceId);
     // Optionally, clear the cart after placing the order
-    // setState(() {
-    //   cart.clear();
-    // });
-  }
 
+  }
 
   @override
   void initState() {
@@ -273,13 +283,14 @@ class _OrderScreenState extends State<OrderScreen> {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 2,
       child: ElevatedButton(
-        onPressed: () {
-          isshow = false;
+        onPressed: () async {
+          print(orderId);
+          // await updateStatus(orderId, "Complete");
           QuickAlert.show(
               context: context,
               barrierDismissible: false,
               type: QuickAlertType.success,
-              text: 'Buy  Completed Successfully!',
+              text: 'Buy Completed Successfully!',
               onConfirmBtnTap: () {
                 Navigator.pushNamed(context, Routes.myorder);
               });
@@ -297,11 +308,68 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
+  // Widget buildComplete() {
+  //   return SizedBox(
+  //     width: MediaQuery.of(context).size.width / 2,
+  //     child: ElevatedButton(
+  //       onPressed: () async {
+  //         await updateStatus(orderId,"Complete");
+  //         isshow = false;
+  //         QuickAlert.show(
+  //             context: context,
+  //             barrierDismissible: false,
+  //             type: QuickAlertType.success,
+  //             text: 'Buy  Completed Successfully!',
+  //             onConfirmBtnTap: () {
+  //               Navigator.pushNamed(context, Routes.myorder);
+  //             });
+  //       },
+  //       style: ElevatedButton.styleFrom(
+  //           backgroundColor: Colors.green,
+  //           padding: const EdgeInsets.symmetric(vertical: 16),
+  //           textStyle: const TextStyle(fontSize: 18),
+  //           shape: RoundedRectangleBorder()),
+  //       child: const Text(
+  //         "COMPLETE",
+  //         style: TextStyle(color: Colors.white, fontSize: 18),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Widget buildMarkAsReceived() {
+  //   return SizedBox(
+  //     width: MediaQuery.of(context).size.width / 2,
+  //     child: ElevatedButton(
+  //       onPressed: () {
+  //         setState(() {
+  //           isshow = false;
+  //           buttonState = "COMPLETE";
+  //           process = "Complete";
+  //           datatime =
+  //               "${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
+  //         });
+  //       },
+  //       style: ElevatedButton.styleFrom(
+  //           backgroundColor: Colors.white,
+  //           padding: const EdgeInsets.symmetric(vertical: 16),
+  //           textStyle: const TextStyle(fontSize: 18),
+  //           side: BorderSide(color: Colors.black, width: 2),
+  //           shape: RoundedRectangleBorder()),
+  //       child: const Text(
+  //         "MARK AS RECEIVED",
+  //         style: TextStyle(color: Colors.black, fontSize: 18),
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget buildMarkAsReceived() {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 2,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
+          print("ordxer id ${orderId}");
+          await updateStatus(orderId, "Complete");
           setState(() {
             isshow = false;
             buttonState = "COMPLETE";
@@ -333,7 +401,11 @@ class _OrderScreenState extends State<OrderScreen> {
           _savePreferences();
           placeOrder();
 
+          
+
           setState(() {
+            // cart.removeWhere((item)=>item['selected']==true);
+
             buttonState = "MARK AS RECEIVED";
             datatime =
                 "${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
@@ -514,6 +586,7 @@ class _OrderScreenState extends State<OrderScreen> {
           _calculateTotal();
         });
         showTopSnackBar(
+          // ignore: use_build_context_synchronously
           Overlay.of(context),
           CustomSnackBar.success(
             message: "Applied Cupon successfully.",
@@ -525,6 +598,7 @@ class _OrderScreenState extends State<OrderScreen> {
         });
 
         showTopSnackBar(
+          // ignore: use_build_context_synchronously
           Overlay.of(context),
           CustomSnackBar.error(
             message: "Invalid Cupon Code!",
