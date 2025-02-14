@@ -47,9 +47,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         //       content:
         //           Text("Username already exists. Please choose another one.")),
         // );
-
-
-
       } else {
         // Register the user
         await LoginHelper.registerUser(username, password, firstName, lastName);
@@ -57,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         // Save registration status
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isRegistered', true);
-
+        await prefs.setString('user', username);
         // Show success dialog
         AwesomeDialog(
           // ignore: use_build_context_synchronously

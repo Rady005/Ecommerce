@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -7,6 +8,7 @@ class Order {
   final DateTime datetime;
   final String name;
   final String price;
+  final int userid;
 
   Order({
     required this.id,
@@ -14,6 +16,7 @@ class Order {
     required this.datetime,
     required this.name,
     required this.price,
+    required this.userid,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +26,7 @@ class Order {
       'datetime': datetime.toIso8601String(),
       'name': name,
       'price': price,
+      'userid': userid
     };
   }
 
@@ -31,10 +35,10 @@ class Order {
       join(await getDatabasesPath(), 'orders_database.db'),
       onCreate: (db, version) {
         db.execute(
-          'CREATE TABLE orders(id TEXT PRIMARY KEY, status TEXT, datetime TEXT, name TEXT, price TEXT)',
+          'CREATE TABLE orders(id TEXT PRIMARY KEY, status TEXT, datetime TEXT, name TEXT, price TEXT,userid INTEGER)',
         );
         db.execute(
-          'CREATE TABLE orderdetails(id TEXT PRIMARY KEY, idproduct INTEGER, productname TEXT, productprice TEXT, qtyproduct INTEGER, image TEXT, order_id TEXT, FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE)',
+          'CREATE TABLE orderdetails(id TEXT PRIMARY KEY, idproduct INTEGER, productname TEXT, productprice TEXT, qtyproduct INTEGER, image TEXT, order_id TEXT,userid INTEGER, FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE)',
         );
       },
       version: 3,
@@ -62,6 +66,7 @@ class OrderDetails {
   final int qtyproduct;
   final String image; // Add the image field
   final String orderId;
+  final int userid;
 
   OrderDetails({
     required this.id,
@@ -69,8 +74,9 @@ class OrderDetails {
     required this.productname,
     required this.productprice,
     required this.qtyproduct,
-    required this.image, // Add the image field
+    required this.image,
     required this.orderId,
+    required this.userid,
   });
 
   Map<String, dynamic> toMap() {
@@ -82,6 +88,7 @@ class OrderDetails {
       'qtyproduct': qtyproduct,
       'image': image, // Add the image field
       'order_id': orderId,
+      'userid': userid,
     };
   }
 
@@ -90,10 +97,10 @@ class OrderDetails {
       join(await getDatabasesPath(), 'orders_database.db'),
       onCreate: (db, version) {
         db.execute(
-          'CREATE TABLE orders(id TEXT PRIMARY KEY, status TEXT, datetime TEXT, name TEXT, price TEXT)',
+          'CREATE TABLE orders(id TEXT PRIMARY KEY, status TEXT, datetime TEXT, name TEXT, price TEXT,userid INTERGER)',
         );
         db.execute(
-          'CREATE TABLE orderdetails(id TEXT PRIMARY KEY, idproduct INTEGER, productname TEXT, productprice TEXT, qtyproduct INTEGER, image TEXT, order_id TEXT, FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE)',
+          'CREATE TABLE orderdetails(id TEXT PRIMARY KEY, idproduct INTEGER, productname TEXT, productprice TEXT, qtyproduct INTEGER, image TEXT, order_id TEXT, userid INTEGER,FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE)',
         );
       },
       version: 3,

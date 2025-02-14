@@ -36,6 +36,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       if (isValidUser) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isRegistered', true);
+        await prefs.setString('user', username);
 
         Navigator.pushNamedAndRemoveUntil(
           // ignore: use_build_context_synchronously

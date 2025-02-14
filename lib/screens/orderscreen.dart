@@ -1,3 +1,4 @@
+import 'package:assigmentflutterone/models/db/dbloginmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -37,8 +38,30 @@ class _OrderScreenState extends State<OrderScreen> {
   bool isshow = false;
   String orderId = "";
 
+  int user_id = 0;
+
+  void getUserId() async {
+    try {
+      var prefs = await SharedPreferences.getInstance();
+      var storeUsername = prefs.getString("user") ?? "users";
+      var data = await LoginHelper.getUserDetails(storeUsername);
+      if (data != null) {
+        setState(() {
+
+          user_id = data["user_id"];
+        
+        });
+      } else {
+        print("User not found");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
+
   Future<void> saveOrder(
-      List<Map<String, dynamic>> cart, String invoiceId) async {
+      List<Map<String, dynamic>> cart, String invoiceId,int userId) async {
     var now = DateTime.now();
     // final formattedDateTime = DateFormat('yyyyMMddHHmmsss').format(now);
 
@@ -57,7 +80,8 @@ class _OrderScreenState extends State<OrderScreen> {
       status: process,
       datetime: now,
       name: ' $invoiceId',
-      price: totalPrice.toString(), // Use the calculated total price
+      price: totalPrice.toString(), userid: user_id,
+
     );
 
     await order.saveToDatabase();
@@ -78,7 +102,7 @@ class _OrderScreenState extends State<OrderScreen> {
           productprice: product.price.toString(),
           qtyproduct: quantity,
           image: imageUrls[j].trim(), // Use the individual image URL
-          orderId: order.id,
+          orderId: order.id, userid: user_id,
         );
 
         // print("imageURL: ${imageUrls[j].trim()}");
@@ -97,17 +121,17 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  void placeOrder() {
-    var invoiceId = DateFormat('yyyyMMddHHmmsss').format(DateTime.now());
-    saveOrder(cart, invoiceId);
-    // Optionally, clear the cart after placing the order
-
+  void placeOrder(int userId) {
+    var invoiceId = DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+    saveOrder(cart, invoiceId, user_id);
   }
 
   @override
   void initState() {
     super.initState();
     _loadPreferences();
+    getUserId();
+    print("userID $user_id");
   }
 
   @override
@@ -308,61 +332,6 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  // Widget buildComplete() {
-  //   return SizedBox(
-  //     width: MediaQuery.of(context).size.width / 2,
-  //     child: ElevatedButton(
-  //       onPressed: () async {
-  //         await updateStatus(orderId,"Complete");
-  //         isshow = false;
-  //         QuickAlert.show(
-  //             context: context,
-  //             barrierDismissible: false,
-  //             type: QuickAlertType.success,
-  //             text: 'Buy  Completed Successfully!',
-  //             onConfirmBtnTap: () {
-  //               Navigator.pushNamed(context, Routes.myorder);
-  //             });
-  //       },
-  //       style: ElevatedButton.styleFrom(
-  //           backgroundColor: Colors.green,
-  //           padding: const EdgeInsets.symmetric(vertical: 16),
-  //           textStyle: const TextStyle(fontSize: 18),
-  //           shape: RoundedRectangleBorder()),
-  //       child: const Text(
-  //         "COMPLETE",
-  //         style: TextStyle(color: Colors.white, fontSize: 18),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget buildMarkAsReceived() {
-  //   return SizedBox(
-  //     width: MediaQuery.of(context).size.width / 2,
-  //     child: ElevatedButton(
-  //       onPressed: () {
-  //         setState(() {
-  //           isshow = false;
-  //           buttonState = "COMPLETE";
-  //           process = "Complete";
-  //           datatime =
-  //               "${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
-  //         });
-  //       },
-  //       style: ElevatedButton.styleFrom(
-  //           backgroundColor: Colors.white,
-  //           padding: const EdgeInsets.symmetric(vertical: 16),
-  //           textStyle: const TextStyle(fontSize: 18),
-  //           side: BorderSide(color: Colors.black, width: 2),
-  //           shape: RoundedRectangleBorder()),
-  //       child: const Text(
-  //         "MARK AS RECEIVED",
-  //         style: TextStyle(color: Colors.black, fontSize: 18),
-  //       ),
-  //     ),
-  //   );
-  // }
   Widget buildMarkAsReceived() {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 2,
@@ -396,12 +365,11 @@ class _OrderScreenState extends State<OrderScreen> {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 2,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           isshow = true;
           _savePreferences();
-          placeOrder();
 
-          
+          placeOrder(user_id);
 
           setState(() {
             // cart.removeWhere((item)=>item['selected']==true);

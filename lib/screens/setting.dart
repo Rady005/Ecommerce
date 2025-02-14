@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/db/dbloginmodel.dart';
 import '../routes/routes.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -14,6 +14,16 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  String fullname = "";
+  String username = "";
+  int user_id = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getFullName();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,30 +71,27 @@ class _SettingScreenState extends State<SettingScreen> {
               children: [
                 // Circle with initials
                 CircleAvatar(
-                  radius: 28,
-                  backgroundColor: Colors.grey.shade300,
-                  child: const Text(
-                    "RD",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
+                    radius: 28,
+                    backgroundColor: Colors.white,
+                    child: Center(
+                        child: Image.asset(
+                            fit: BoxFit.contain,
+                            width: 56,
+                            height: 56,
+                            "assets/profile.jpg"))),
                 const SizedBox(width: 15),
                 // Name and Date
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
-                      "Ren Rady",
-                      style: TextStyle(
+                      "Hello $username",
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "21 October",
                       style: TextStyle(
                         fontSize: 16,
@@ -144,8 +151,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   onTap: () async {
                     final prefs = await SharedPreferences.getInstance();
                     await prefs.remove("isRegistered");
-                    
+
                     await prefs.remove("isLoggedIn");
+                    await prefs.remove("user");
 
                     QuickAlert.show(
                       // ignore: use_build_context_synchronously
@@ -193,5 +201,25 @@ class _SettingScreenState extends State<SettingScreen> {
         onTap: onTap,
       ),
     );
+  }
+
+  void getFullName() async {
+    try {
+      var prefs = await SharedPreferences.getInstance();
+      var storeUsername = prefs.getString("user") ?? "users";
+      var data = await LoginHelper.getUserDetails(storeUsername);
+      if (data != null) {
+        setState(() {
+          fullname = "${data["first_name"]} ${data['last_name']}";
+          username = data["username"];
+          user_id = data["user_id"];
+          print(fullname);
+        });
+      } else {
+        print("User not found");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 }
