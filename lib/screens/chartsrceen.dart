@@ -3,10 +3,10 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../widgets/cartservice.dart';
 import '../models/allitemdisplay.dart';
 import '../models/selectedlist.dart';
 import '../routes/routes.dart';
-import '../../widgets/cartservice.dart';
 
 class MyCart extends StatefulWidget {
   const MyCart({super.key});
@@ -122,6 +122,7 @@ class _MyCartState extends State<MyCart> {
       return;
     } else {
       Navigator.pushNamed(context, Routes.order, arguments: selectedItems);
+      _removeSelectedItems();
     }
 
     // Remove selected items from the cart

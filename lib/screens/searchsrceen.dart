@@ -136,7 +136,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/listproduct.dart';
-import '../models/resource/product_sliver.dart';
+import '../models/db/resource/product_sliver.dart';
 import 'allproduct.dart';
 import 'chartsrceen.dart';
 

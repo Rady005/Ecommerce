@@ -74,11 +74,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     radius: 28,
                     backgroundColor: Colors.white,
                     child: Center(
-                        child: Image.asset(
-                            fit: BoxFit.contain,
-                            width: 56,
-                            height: 56,
-                            "assets/profile.jpg"))),
+                      child: Image.asset(
+                          fit: BoxFit.contain,
+                          width: 56,
+                          height: 56,
+                          "assets/profile.jpg"),
+                    )),
                 const SizedBox(width: 15),
                 // Name and Date
                 Column(
@@ -161,6 +162,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       backgroundColor: Colors.white,
                       headerBackgroundColor: Colors.yellow,
                       type: QuickAlertType.warning,
+
                       text: 'Are you sure you want to logout ?',
                       borderRadius: 20,
                       onConfirmBtnTap: () {

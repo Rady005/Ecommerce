@@ -13,6 +13,7 @@ import '../models/allitemdisplay.dart';
 import '../models/cupon.dart';
 import '../models/db/dbmodel.dart';
 import '../routes/routes.dart';
+import '../widgets/paymentbottomsheet.dart';
 import 'map_screen.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -37,8 +38,9 @@ class _OrderScreenState extends State<OrderScreen> {
   String datatime = "";
   bool isshow = false;
   String orderId = "";
+  String payment = "null";
 
-  int user_id = 0;
+  int userid = 0;
 
   void getUserId() async {
     try {
@@ -47,9 +49,7 @@ class _OrderScreenState extends State<OrderScreen> {
       var data = await LoginHelper.getUserDetails(storeUsername);
       if (data != null) {
         setState(() {
-
-          user_id = data["user_id"];
-        
+          userid = data["user_id"];
         });
       } else {
         print("User not found");
@@ -59,9 +59,8 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
-
   Future<void> saveOrder(
-      List<Map<String, dynamic>> cart, String invoiceId,int userId) async {
+      List<Map<String, dynamic>> cart, String invoiceId, int userId) async {
     var now = DateTime.now();
     // final formattedDateTime = DateFormat('yyyyMMddHHmmsss').format(now);
 
@@ -80,8 +79,8 @@ class _OrderScreenState extends State<OrderScreen> {
       status: process,
       datetime: now,
       name: ' $invoiceId',
-      price: totalPrice.toString(), userid: user_id,
-
+      price: totalPrice.toStringAsFixed(2),
+      userid: userid,
     );
 
     await order.saveToDatabase();
@@ -102,7 +101,8 @@ class _OrderScreenState extends State<OrderScreen> {
           productprice: product.price.toString(),
           qtyproduct: quantity,
           image: imageUrls[j].trim(), // Use the individual image URL
-          orderId: order.id, userid: user_id,
+          orderId: order.id, userid: userid, deliveryLocation: location,
+          contactNumber: phonenumber, paymentMethod: payment, cupon: cupon,
         );
 
         // print("imageURL: ${imageUrls[j].trim()}");
@@ -123,7 +123,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
   void placeOrder(int userId) {
     var invoiceId = DateFormat('yyyyMMddHHmmss').format(DateTime.now());
-    saveOrder(cart, invoiceId, user_id);
+    saveOrder(cart, invoiceId, userid);
   }
 
   @override
@@ -131,18 +131,32 @@ class _OrderScreenState extends State<OrderScreen> {
     super.initState();
     _loadPreferences();
     getUserId();
-    print("userID $user_id");
+    print("userID $userid");
   }
 
   @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   final arguments = ModalRoute.of(context)?.settings.arguments
+  //       as List<Map<String, dynamic>>;
+  //   setState(() {
+  //     cart = arguments;
+  //     _calculateTotal();
+  //   });
+  // }
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final arguments = ModalRoute.of(context)?.settings.arguments
-        as List<Map<String, dynamic>>;
-    setState(() {
-      cart = arguments;
-      _calculateTotal();
-    });
+    final arguments = ModalRoute.of(context)?.settings.arguments;
+    if (arguments is List<Map<String, dynamic>>) {
+      setState(() {
+        cart = arguments;
+        _calculateTotal();
+      });
+    } else if (arguments is String) {
+      setState(() {
+        payment = arguments; // Retrieve payment method from arguments
+      });
+    }
   }
 
   Future<void> _loadPreferences() async {
@@ -185,6 +199,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         title: const Text("Orders"),
         backgroundColor: Colors.pinkAccent,
         foregroundColor: Colors.white,
@@ -223,10 +238,10 @@ class _OrderScreenState extends State<OrderScreen> {
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-                      pushPaymentScreen(context);
+                      showPayment();
                     },
-                    child: buildwithImage("assets/debit/cash 1@2x.png",
-                        "Payment", "Cash on Delivery"),
+                    child: buildwithImage(
+                        "assets/debit/cash 1@2x.png", "Payment", payment),
                   ),
                   const SizedBox(height: 10),
                   const Divider(),
@@ -238,7 +253,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       genderModalDailogCoupon();
                     },
                     child: buildwithImage(
-                        "assets/Voucher@3x.png", "Coupon", cupon),
+                        "assets/Voucher@3x.png", "Cupon", cupon),
                   ),
                   const Divider(),
                   cart.isEmpty ? const Text("No product") : buildItem(),
@@ -308,16 +323,8 @@ class _OrderScreenState extends State<OrderScreen> {
       width: MediaQuery.of(context).size.width / 2,
       child: ElevatedButton(
         onPressed: () async {
-          print(orderId);
+          // print(orderId);
           // await updateStatus(orderId, "Complete");
-          QuickAlert.show(
-              context: context,
-              barrierDismissible: false,
-              type: QuickAlertType.success,
-              text: 'Buy Completed Successfully!',
-              onConfirmBtnTap: () {
-                Navigator.pushNamed(context, Routes.myorder);
-              });
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
@@ -337,7 +344,6 @@ class _OrderScreenState extends State<OrderScreen> {
       width: MediaQuery.of(context).size.width / 2,
       child: ElevatedButton(
         onPressed: () async {
-          print("ordxer id ${orderId}");
           await updateStatus(orderId, "Complete");
           setState(() {
             isshow = false;
@@ -346,6 +352,14 @@ class _OrderScreenState extends State<OrderScreen> {
             datatime =
                 "${DateFormat('h:mm a dd MMM yyyy').format(DateTime.now())} ";
           });
+          QuickAlert.show(
+              context: context,
+              barrierDismissible: false,
+              type: QuickAlertType.success,
+              text: 'Buy Completed Successfully!',
+              onConfirmBtnTap: () {
+                Navigator.pushNamed(context, Routes.myorder);
+              });
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
@@ -369,7 +383,7 @@ class _OrderScreenState extends State<OrderScreen> {
           isshow = true;
           _savePreferences();
 
-          placeOrder(user_id);
+          placeOrder(userid);
 
           setState(() {
             // cart.removeWhere((item)=>item['selected']==true);
@@ -536,6 +550,16 @@ class _OrderScreenState extends State<OrderScreen> {
         _savePreferences();
       });
     }
+  }
+
+  void showPayment() async {
+    var result = await Paymentbottomsheet.show(context);
+    if (result is String) {
+      setState(() {
+        payment = result;
+      });
+    }
+    print("Payment :$result");
   }
 
   void genderModalDailogCoupon() async {

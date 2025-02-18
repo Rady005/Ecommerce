@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/db/dbloginmodel.dart';
@@ -55,25 +56,74 @@ class _RegisterScreenState extends State<RegisterScreen> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isRegistered', true);
         await prefs.setString('user', username);
-        // Show success dialog
-        AwesomeDialog(
+
+
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.mains,
+          (route) => false,
+        );
+                QuickAlert.show(
           // ignore: use_build_context_synchronously
           context: context,
-          dialogType: DialogType.success,
-          animType: AnimType.rightSlide,
-          title: 'Registration Successful',
-          desc: 'You have registered successfully!',
-          btnOkOnPress: () {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              Routes.mains,
-              (route) => false,
-            );
-          },
-        ).show();
+          backgroundColor: Colors.white,
+          headerBackgroundColor: Colors.green,
+          type: QuickAlertType.success,
+          title: "congratulations",
+          text: 'Welecome $username',
+
+          borderRadius: 20,
+          // onConfirmBtnTap: () {
+          //   Navigator.pop(context);
+          // },
+        );
+        // Show success dialog
+
+        // Navigate to the main screen
       }
     }
   }
+  // Future<void> _register() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     String username = _usernameController.text.trim();
+  //     String password = _passwordController.text.trim();
+  //     String firstName = _firstNameController.text.trim();
+  //     String lastName = _lastNameController.text.trim();
+
+  //     // Check if the username already exists
+  //     bool userExists = await LoginHelper.checkUserExists(username, password);
+  //     if (userExists) {
+  //       // ScaffoldMessenger.of(context).showSnackBar(
+  //       //   SnackBar(
+  //       //       content:
+  //       //           Text("Username already exists. Please choose another one.")),
+  //       // );
+  //     } else {
+  //       // Register the user
+  //       await LoginHelper.registerUser(username, password, firstName, lastName);
+
+  //       // Save registration status
+  //       final prefs = await SharedPreferences.getInstance();
+  //       await prefs.setBool('isRegistered', true);
+  //       await prefs.setString('user', username);
+  //       Navigator.pushNamedAndRemoveUntil(
+  //         context,
+  //         Routes.mains,
+  //         (route) => false,
+  //       );
+  //       // Show success dialog
+  //       AwesomeDialog(
+  //         // ignore: use_build_context_synchronously
+  //         context: context,
+  //         dialogType: DialogType.success,
+  //         animType: AnimType.rightSlide,
+  //         title: 'Registration Successful',
+  //         desc: 'You have registered successfully!',
+  //         autoHide: Duration(seconds: 5)
+  //       ).show();
+  //     }
+  //   }
+  // }
 
   String? _validateEmptyField(String? value, String fieldName) {
     if (value == null || value.isEmpty) {

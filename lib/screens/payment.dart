@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bounceable/flutter_bounceable.dart';
+
+import '../routes/routes.dart';
+
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({super.key});
@@ -12,8 +16,18 @@ class PaymentScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(children: [
-          buildPayment(
-              "assets/cash 1@2x.png", "Cash on Delivery", "Cash on Delivery"),
+          Bounceable(
+            onTap: () {
+              Navigator.pushNamed(
+                context,Routes.order,
+                arguments: "Cash on Delivery"
+
+              );
+              
+            },
+            child: buildPayment(
+                "assets/cash 1@2x.png", "Cash on Delivery", "Cash on Delivery"),
+          ),
           SizedBox(
             height: 15,
           ),

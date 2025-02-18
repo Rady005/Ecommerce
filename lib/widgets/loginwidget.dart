@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/db/dbloginmodel.dart';
@@ -18,6 +19,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
   String? _errorMessage;
+  String username = "";
 
   @override
   void dispose() {
@@ -39,10 +41,39 @@ class _LoginWidgetState extends State<LoginWidget> {
         await prefs.setString('user', username);
 
         Navigator.pushNamedAndRemoveUntil(
-          // ignore: use_build_context_synchronously
           context,
           Routes.mains,
           (route) => false,
+        );
+        // Show success dialog
+        // await AwesomeDialog(
+        //   context: context,
+        //   dialogType: DialogType.success,
+        //   animType: AnimType.rightSlide,
+        //   title: 'Registration Successful',
+        //   desc: 'You have registered successfully!',
+        //   autoHide: Duration(seconds: 5),
+
+        // ).show();
+        // } else {
+        //   setState(() {
+        //     _errorMessage = "Incorrect username or password";
+        //   });
+        // }
+
+        QuickAlert.show(
+          // ignore: use_build_context_synchronously
+          context: context,
+          backgroundColor: Colors.white,
+          headerBackgroundColor: Colors.green,
+          type: QuickAlertType.success,
+          title: "congratulations",
+          text: 'Welecome $username',
+       
+          borderRadius: 20,
+          // onConfirmBtnTap: () {
+          //   Navigator.pop(context);
+          // },
         );
       } else {
         setState(() {
@@ -194,5 +225,22 @@ class _LoginWidgetState extends State<LoginWidget> {
         ),
       ),
     );
+  }
+
+  void getFullName() async {
+    try {
+      var prefs = await SharedPreferences.getInstance();
+      var storeUsername = prefs.getString("user") ?? "users";
+      var data = await LoginHelper.getUserDetails(storeUsername);
+      if (data != null) {
+        setState(() {
+          username = data["username"];
+        });
+      } else {
+        print("User not found");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 }
