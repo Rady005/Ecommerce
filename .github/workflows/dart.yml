@@ -47,10 +47,3 @@ jobs:
           tag: v1.0
           overwrite: true
           body: "This is the first release"
-
-English
-name: 🎉 iOS Build runs-on: macos-latest
-KHMER
-ឈ្មោះ៖ 🎉 iOS Build ដំណើរការលើ៖ macos-latest
-
-EXTENSION OPTIONSMORE »
